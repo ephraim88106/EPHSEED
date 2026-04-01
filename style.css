@@ -189,6 +189,7 @@
         font-weight: 900;
         margin-bottom: 1.5rem;
         color: var(--bg-dark);
+        word-break: keep-all;
     }
 
     .hero h1 strong {
