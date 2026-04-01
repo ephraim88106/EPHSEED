@@ -32,11 +32,16 @@ Ephseed is a professional AI-based monitoring and control service designed for u
 4.  **Web Component Development (`main.js`):**
     - Create `e-header`, `e-card`, `e-pricing`, and `e-footer` components.
     - Implement interactive elements with hover/glow effects. (Done)
-5.  **Section Implementation:**
+5.  **Visual Illustration Implementation:**
+    - Replace placeholders with high-fidelity UI illustrations using CSS and SVG.
+    - **AI Detection:** Implement bounding boxes and scanline animations.
+    - **Remote Audio:** Implement pulsing wave effects.
+    - **Data Analytics:** Implement mini-charts and metric cards. (Done)
+6.  **Section Implementation:**
     - **Hero Section:** High-impact messaging with professional imagery (placeholder).
     - **Problem Section:** Highlight pain points with iconography.
     - **Solution Section:** Detail the AI monitoring and analysis features.
     - **Pricing Section:** Comparative table for tiered plans.
     - **CTA/Inquiry:** Simple, clear lead generation form/button. (Updated: Removed Free Trial)
-6.  **Responsive Optimization:** Use container queries and media queries to ensure a perfect mobile experience. (Done)
-7.  **Validation:** Check for accessibility (A11Y) and visual polish.
+7.  **Responsive Optimization:** Use container queries and media queries to ensure a perfect mobile experience. (Done)
+8.  **Validation:** Check for accessibility (A11Y) and visual polish.
