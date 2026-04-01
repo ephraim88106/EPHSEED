@@ -14,7 +14,7 @@ const firebaseConfig = {
 };
 
 // --- Telegram Configuration ---
-const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; // @BotFather를 통해 받은 토큰
+const TELEGRAM_BOT_TOKEN = '8729037979:AAFxfxv_k3ZuehM0mLlJjHYn5ASRlW4NFHQ'; // @BotFather를 통해 받은 토큰
 const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID';     // @userinfobot 등을 통해 받은 본인의 ID
 
 // Header Component
