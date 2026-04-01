@@ -30,7 +30,7 @@ Ephseed is a professional AI-based monitoring and control service designed for u
 4.  **Web Component Development (`main.js`):** (Done)
 5.  **Visual Illustration Implementation:** (Done)
 6.  **Page Specific Implementation:**
-    - **Main Page:** Added 도입 프로세스, 핵심 가치, FAQ sections. (Done)
+    - **Main Page:** Added 도입 프로세스, 핵심 가치 (20+ stores), FAQ sections. (Done)
     - **Features Page:** Created dedicated page for AI Detection & Audio Broadcasting details. (Done)
     - **About Page:** Created dedicated page for Service Background. (Done)
 7.  **Responsive Optimization:** (Done)
