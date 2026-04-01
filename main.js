@@ -1,6 +1,21 @@
 /**
- * Ephseed Web Components
+ * Ephseed Web Components & Logic
  */
+
+// --- Firebase Configuration (Placeholder) ---
+// 실제 Firebase 설정값으로 교체해야 합니다.
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// --- Telegram Configuration ---
+const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; // @BotFather를 통해 받은 토큰
+const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID';     // @userinfobot 등을 통해 받은 본인의 ID
 
 // Header Component
 class EphseedHeader extends HTMLElement {
@@ -16,6 +31,7 @@ class EphseedHeader extends HTMLElement {
 
     handleScroll() {
         const header = this.shadowRoot.querySelector('header');
+        if (!header) return;
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
@@ -99,7 +115,7 @@ class EphseedHeader extends HTMLElement {
                     <a href="about.html">서비스 배경</a>
                     <a href="features.html">기능 소개</a>
                     <a href="index.html#pricing">요금제</a>
-                    <a href="index.html#cta" class="btn-contact">상담 신청</a>
+                    <a href="contact.html" class="btn-contact">상담 신청</a>
                 </nav>
             </div>
         </header>
@@ -288,7 +304,7 @@ class EphseedPricing extends HTMLElement {
             <ul>
                 ${features.map(f => `<li>${f}</li>`).join('')}
             </ul>
-            <a href="#" class="btn">시작하기</a>
+            <a href="contact.html" class="btn">시작하기</a>
         </div>
         `;
     }
@@ -397,6 +413,71 @@ class EphseedFooter extends HTMLElement {
 }
 customElements.define('e-footer', EphseedFooter);
 
+// --- Form Submission & Telegram Logic ---
+async function sendTelegramNotification(data) {
+    const message = `
+🚀 [에브라임 시드] 새로운 상담 신청!
+- 성함: ${data.name}
+- 연락처: ${data.phone}
+- 매장종류: ${data.storeType}
+- 문의사항: ${data.message || '없음'}
+    `;
+    
+    try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message
+            })
+        });
+    } catch (err) {
+        console.error("Telegram error:", err);
+    }
+}
+
+// Contact Form Handler
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData.entries());
+        data.timestamp = new Date().toISOString();
+
+        // 1. Save to LocalStorage (Simulation for admin.html)
+        const inquiries = JSON.parse(localStorage.getItem('ephseed_inquiries') || '[]');
+        inquiries.unshift(data);
+        localStorage.setItem('ephseed_inquiries', JSON.stringify(inquiries));
+
+        // 2. Send Telegram
+        await sendTelegramNotification(data);
+
+        alert('상담 신청이 완료되었습니다. 곧 연락드리겠습니다!');
+        window.location.href = 'index.html';
+    });
+}
+
+// Admin Dashboard Loader
+const inquiryList = document.getElementById('inquiryList');
+if (inquiryList) {
+    const inquiries = JSON.parse(localStorage.getItem('ephseed_inquiries') || '[]');
+    if (inquiries.length === 0) {
+        inquiryList.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 3rem;">접수된 내역이 없습니다.</td></tr>';
+    } else {
+        inquiryList.innerHTML = inquiries.map(item => `
+            <tr>
+                <td>${new Date(item.timestamp).toLocaleString()}</td>
+                <td>${item.name}</td>
+                <td>${item.phone}</td>
+                <td>${item.storeType}</td>
+                <td>${item.message}</td>
+            </tr>
+        `).join('');
+    }
+}
+
 // Smooth Scrolling for anchor links
 document.addEventListener('click', (e) => {
     const anchor = e.target.closest('a[href*="#"]');
@@ -406,7 +487,6 @@ document.addEventListener('click', (e) => {
     const [path, hash] = href.split('#');
     const currentPath = window.location.pathname.split('/').pop() || 'index.html';
 
-    // If it's the same page, do smooth scroll
     if (!path || path === currentPath || (path === 'index.html' && currentPath === '')) {
         const target = document.querySelector('#' + hash);
         if (target) {

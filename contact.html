@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담 신청 - 에브라임 시드 (Ephseed)</title>
+    <meta name="description" content="에브라임 시드 지능형 관제 서비스 도입 상담을 신청하세요.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="noise-bg">
+    <e-header></e-header>
+
+    <main>
+        <section class="hero" style="padding-bottom: 2rem;">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="badge">Inquiry</span>
+                    <h1>상담 신청하기</h1>
+                    <p>매장 정보를 남겨주시면, <br>전문 컨설턴트가 신속하게 연락드리겠습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="contact-form-container">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">성함 (또는 상호명)</label>
+                            <input type="text" id="name" name="name" placeholder="홍길동" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">연락처</label>
+                            <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="storeType">매장 종류</label>
+                            <select id="storeType" name="storeType">
+                                <option value="study-cafe">스터디카페</option>
+                                <option value="convenience-store">무인 편의점</option>
+                                <option value="laundry">무인 세탁소</option>
+                                <option value="other">기타</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">문의 사항 (선택)</label>
+                            <textarea id="message" name="message" rows="4" placeholder="상담 시 참고할 내용을 적어주세요."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit-btn glow-effect">신청 완료</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <e-footer></e-footer>
+
+    <!-- Firebase Scripts will be added via main.js or here -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
