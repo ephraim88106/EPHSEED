@@ -9,6 +9,58 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--shadow-glow);
+        }
+        .faq-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-base);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        .faq-item:hover {
+            transform: translateX(10px);
+            border-color: var(--primary-light);
+        }
+        .faq-question {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+            display: flex;
+            gap: 0.75rem;
+        }
+        .faq-answer {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body class="noise-bg">
     <e-header></e-header>
@@ -22,51 +74,98 @@
                     <h1>사장님은 푹 주무세요.<br>관제는 AI와 <strong>에브라임</strong>이 합니다.</h1>
                     <p>24시간 365일 지능형 AI가 이상 행동을 감지하고,<br>전문가가 즉시 대응하여 사장님의 밤잠을 찾아드립니다.</p>
                     <div class="hero-actions">
-                        <button class="btn btn-primary glow-effect">상담 신청하기</button>
+                        <a href="features.html" class="btn btn-primary glow-effect">핵심 기능 보기</a>
                         <a href="about.html" class="btn btn-secondary">서비스 배경 보기</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Solution Section -->
-        <section id="solution" class="section bg-alt">
+        <!-- Process Section -->
+        <section id="process" class="section bg-alt">
             <div class="container">
                 <div class="section-header">
-                    <h2>단순 보안을 넘어 매출 전략까지</h2>
-                    <p>에브라임 시드만의 차별화된 지능형 솔루션을 경험하세요.</p>
+                    <h2>간편한 도입 프로세스</h2>
+                    <p>상담부터 실제 관제 시작까지, 단 4단계면 충분합니다.</p>
                 </div>
-                <div class="solution-grid">
-                    <div class="solution-item">
-                        <div class="solution-text">
-                            <h3>01. 실시간 지능형 관제</h3>
-                            <p>AI가 매장 내 모든 이상 행동을 실시간으로 분석합니다. 싸움, 배회, 비구매 방문 등을 즉시 캐치하여 관제 센터로 전달합니다.</p>
-                        </div>
-                        <div class="illustration-container ai-detection">
-                            <div class="camera-feed">
-                                <div class="scanline"></div>
-                                <div class="bounding-box" style="top: 20%; left: 30%; width: 100px; height: 180px;" data-label="Person (ID: 021)"></div>
-                                <div class="bounding-box" style="top: 50%; left: 60%; width: 120px; height: 120px; border-color: oklch(60% 0.2 20);" data-label="Abnormal Behavior"></div>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">01</div>
+                        <h3>도입 상담</h3>
+                        <p>매장 규모와 환경에 맞는 최적의 플랜을 제안합니다.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">02</div>
+                        <h3>기기 설치</h3>
+                        <p>고성능 AI 카메라와 원격 음성 시스템을 신속하게 설치합니다.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">03</div>
+                        <h3>AI 최적화</h3>
+                        <p>매장 구조에 맞춰 AI의 이상 행동 감지 범위를 정밀 튜닝합니다.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">04</div>
+                        <h3>관제 시작</h3>
+                        <p>24시간 365일 실시간 관제와 원격 대응이 즉시 시작됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Values Section -->
+        <section class="section">
+            <div class="container">
+                <div class="grid grid-2" style="align-items: center;">
+                    <div>
+                        <span class="badge">Core Values</span>
+                        <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">왜 에브라임 시드인가요?</h2>
+                        <p style="font-size: 1.125rem; color: var(--text-muted); margin-bottom: 2rem;">우리는 단순한 보안 업체를 넘어, 사장님의 지속 가능한 비즈니스 파트너가 되고자 합니다.</p>
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                                <div style="font-size: 1.5rem;">✨</div>
+                                <div>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.25rem;">현장 중심의 기술력</h4>
+                                    <p style="color: var(--text-muted);">실제 매장 운영 경험을 바탕으로 꼭 필요한 기능만을 담았습니다.</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                                <div style="font-size: 1.5rem;">🛡️</div>
+                                <div>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.25rem;">압도적인 대응 속도</h4>
+                                    <p style="color: var(--text-muted);">AI 감지 즉시 전문 요원이 투입되어 30초 이내에 현장을 통제합니다.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="solution-item reverse">
-                        <div class="solution-text">
-                            <h3>02. 실시간 원격 안내 방송</h3>
-                            <p>이상 행동 감지 시, 전문가가 즉시 현장으로 실시간 음성 방송을 송출합니다. 강력한 경고 메시지로 사고를 사전에 차단합니다.</p>
-                        </div>
-                        <div class="illustration-container audio-system">
-                            <div class="live-indicator">LIVE BROADCASTING</div>
-                            <div class="audio-waves">
-                                <div class="wave-bar" style="animation-delay: 0.1s; height: 40px;"></div>
-                                <div class="wave-bar" style="animation-delay: 0.2s; height: 60px;"></div>
-                                <div class="wave-bar" style="animation-delay: 0.3s; height: 80px;"></div>
-                                <div class="wave-bar" style="animation-delay: 0.4s; height: 50px;"></div>
-                                <div class="wave-bar" style="animation-delay: 0.5s; height: 70px;"></div>
-                                <div class="wave-bar" style="animation-delay: 0.6s; height: 90px;"></div>
-                                <div class="wave-bar" style="animation-delay: 0.7s; height: 40px;"></div>
-                            </div>
-                        </div>
+                    <div style="background: var(--bg-alt); border-radius: 32px; padding: 3rem; text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🚀</div>
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem;">200+</h3>
+                        <p style="color: var(--text-muted);">이미 전국 200여 개의 매장이 <br>에브라임 시드와 함께하고 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="section bg-alt">
+            <div class="container">
+                <div class="section-header">
+                    <h2>자주 묻는 질문</h2>
+                    <p>에브라임 시드 서비스에 대해 궁금해하시는 점들을 모았습니다.</p>
+                </div>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Q.</span> 기존에 설치된 CCTV와 연동이 가능한가요?</div>
+                        <div class="faq-answer">기존 기기의 사양에 따라 다르지만, 대부분의 최신 IP 카메라와는 연동이 가능합니다. 상세 상담을 통해 확인해 드립니다.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Q.</span> 야간에만 관제를 신청할 수도 있나요?</div>
+                        <div class="faq-answer">네, 사장님께서 원하시는 특정 시간대에만 집중 관제 서비스를 제공하는 커스텀 플랜도 운영하고 있습니다.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Q.</span> 사고 발생 시 보상 절차는 어떻게 되나요?</div>
+                        <div class="faq-answer">제휴 보험사를 통해 도난 및 파손에 대한 보상을 지원하며, 관제 센터에서 확보한 모든 영상 데이터는 증거 자료로 즉시 제공됩니다.</div>
                     </div>
                 </div>
             </div>
