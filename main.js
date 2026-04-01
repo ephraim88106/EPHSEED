@@ -93,13 +93,13 @@ class EphseedHeader extends HTMLElement {
         </style>
         <header>
             <div class="container">
-                <a href="#" class="logo">EPH<span>SEED</span></a>
+                <a href="index.html" class="logo">EPH<span>SEED</span></a>
                 <nav>
-                    <a href="#hero">홈</a>
-                    <a href="#problem">서비스 배경</a>
-                    <a href="#solution">기능 소개</a>
-                    <a href="#pricing">요금제</a>
-                    <a href="#cta" class="btn-contact">상담 신청</a>
+                    <a href="index.html#hero">홈</a>
+                    <a href="about.html">서비스 배경</a>
+                    <a href="index.html#solution">기능 소개</a>
+                    <a href="index.html#pricing">요금제</a>
+                    <a href="index.html#cta" class="btn-contact">상담 신청</a>
                 </nav>
             </div>
         </header>
@@ -364,9 +364,9 @@ class EphseedFooter extends HTMLElement {
                 <div>
                     <h4>서비스</h4>
                     <ul>
-                        <li><a href="#">지능형 관제</a></li>
-                        <li><a href="#">원격 방송</a></li>
-                        <li><a href="#">매장 분석</a></li>
+                        <li><a href="index.html#solution">지능형 관제</a></li>
+                        <li><a href="index.html#solution">원격 방송</a></li>
+                        <li><a href="about.html">서비스 배경</a></li>
                         <li><a href="#">맞춤형 컨설팅</a></li>
                     </ul>
                 </div>
@@ -395,19 +395,24 @@ class EphseedFooter extends HTMLElement {
         `;
     }
 }
+customElements.define('e-footer', EphseedFooter);
+
 // Smooth Scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href === '#') return;
-        
-        e.preventDefault();
-        const target = document.querySelector(href);
+document.addEventListener('click', (e) => {
+    const anchor = e.target.closest('a[href*="#"]');
+    if (!anchor) return;
+
+    const href = anchor.getAttribute('href');
+    const [path, hash] = href.split('#');
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+
+    // If it's the same page, do smooth scroll
+    if (!path || path === currentPath || (path === 'index.html' && currentPath === '')) {
+        const target = document.querySelector('#' + hash);
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth'
-            });
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
         }
-    });
+    }
 });
 
