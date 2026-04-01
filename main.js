@@ -415,11 +415,18 @@ customElements.define('e-footer', EphseedFooter);
 
 // --- Form Submission & Telegram Logic ---
 async function sendTelegramNotification(data) {
+    const planMap = {
+        'basic': '실속형 (월 10만)',
+        'standard': '표준형 (월 30만)',
+        'premium': '프리미엄 (월 50만)',
+        'consult': '상담 후 결정'
+    };
     const message = `
 🚀 [에브라임 시드] 새로운 상담 신청!
 - 성함: ${data.name}
 - 연락처: ${data.phone}
 - 매장종류: ${data.storeType}
+- 희망요금제: ${planMap[data.plan] || data.plan}
 - 문의사항: ${data.message || '없음'}
     `;
     
@@ -463,8 +470,14 @@ if (contactForm) {
 const inquiryList = document.getElementById('inquiryList');
 if (inquiryList) {
     const inquiries = JSON.parse(localStorage.getItem('ephseed_inquiries') || '[]');
+    const planMap = {
+        'basic': '실속형',
+        'standard': '표준형',
+        'premium': '프리미엄',
+        'consult': '상담필요'
+    };
     if (inquiries.length === 0) {
-        inquiryList.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 3rem;">접수된 내역이 없습니다.</td></tr>';
+        inquiryList.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 3rem;">접수된 내역이 없습니다.</td></tr>';
     } else {
         inquiryList.innerHTML = inquiries.map(item => `
             <tr>
@@ -472,6 +485,7 @@ if (inquiryList) {
                 <td>${item.name}</td>
                 <td>${item.phone}</td>
                 <td>${item.storeType}</td>
+                <td><span class="status-badge" style="background: var(--primary-light); color: white;">${planMap[item.plan] || item.plan}</span></td>
                 <td>${item.message}</td>
             </tr>
         `).join('');
