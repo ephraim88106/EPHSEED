@@ -370,6 +370,16 @@ class EphseedFooter extends HTMLElement {
                 font-size: 0.85rem;
                 color: rgba(255,255,255,0.4);
             }
+            .legal-links {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+            }
+            .legal-links a {
+                font-size: 0.8rem;
+                text-decoration: underline;
+            }
         </style>
         <footer>
             <div class="container">
@@ -390,9 +400,9 @@ class EphseedFooter extends HTMLElement {
                     <h4>고객지원</h4>
                     <ul>
                         <li><a href="#">자주 묻는 질문</a></li>
-                        <li><a href="#">이용 약관</a></li>
-                        <li><a href="#">개인정보처리방침</a></li>
-                        <li><a href="#">1:1 문의</a></li>
+                        <li><a href="privacy.html">개인정보처리방침</a></li>
+                        <li><a href="terms.html">이용 약관</a></li>
+                        <li><a href="contact.html">1:1 문의</a></li>
                     </ul>
                 </div>
                 <div>
@@ -405,7 +415,11 @@ class EphseedFooter extends HTMLElement {
                 </div>
             </div>
             <div class="bottom">
-                &copy; 2026 Ephseed AI. All rights reserved.
+                <div>&copy; 2026 Ephseed AI. All rights reserved.</div>
+                <div class="legal-links">
+                    <a href="privacy.html">개인정보처리방침</a>
+                    <a href="terms.html">이용약관</a>
+                </div>
             </div>
         </footer>
         `;

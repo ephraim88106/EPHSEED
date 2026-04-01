@@ -8,7 +8,11 @@ Ephseed is a professional AI-based monitoring and control service designed for u
 - **Multi-page Architecture:**
     - `index.html`: Main landing page with process, core values, and FAQ.
     - `about.html`: Detailed service background and problem diagnosis.
-    - `features.html`: Detailed technical features with UI illustrations.
+    - `features.html`: Detailed technical features with expanded descriptions for AdSense quality.
+    - `contact.html`: Consultation request form.
+    - `admin.html`: Internal dashboard for managing inquiries.
+    - `privacy.html`: Privacy Policy (AdSense requirement).
+    - `terms.html`: Terms of Service (AdSense requirement).
 - **Core Features:**
     - 24/7 Intelligent Monitoring (AI + Experts).
     - Real-time Remote Broadcasting for immediate response.
@@ -23,15 +27,22 @@ Ephseed is a professional AI-based monitoring and control service designed for u
     - Web Components for encapsulation.
     - Modern CSS (Baseline): Container queries, `:has()`, Cascade layers, Logical properties.
 
+## AdSense Optimization
+- **Original Content:** Expanded textual descriptions of AI technology and operational processes.
+- **Essential Pages:** Added Privacy Policy and Terms of Service.
+- **Navigation:** Clear, hierarchical navigation through custom `e-header` and `e-footer`.
+- **User Experience:** High-quality UI illustrations and responsive design.
+
 ## Current Plan & Steps
 1.  **Project Initialization:** Set up the base directory structure and `blueprint.md`. (Done)
 2.  **Core Structure Implementation:** Defined multi-page architecture. (Done)
 3.  **Theming & Base Styles (`style.css`):** (Done)
 4.  **Web Component Development (`main.js`):** (Done)
 5.  **Visual Illustration Implementation:** (Done)
-6.  **Page Specific Implementation:**
-    - **Main Page:** Added 도입 프로세스, 핵심 가치 (20+ stores), FAQ sections. (Done)
-    - **Features Page:** Created dedicated page for AI Detection & Audio Broadcasting details. (Done)
-    - **About Page:** Created dedicated page for Service Background. (Done)
-7.  **Responsive Optimization:** (Done)
-8.  **Validation:** Check for accessibility (A11Y) and visual polish.
+6.  **AdSense & Content Optimization:**
+    - Created `privacy.html` and `terms.html`. (Done)
+    - Expanded content in `features.html`. (Done)
+    - Enhanced SEO meta tags in `index.html`. (Done)
+7.  **Consultation Flow Implementation:** (Done)
+8.  **Responsive Optimization:** (Done)
+9.  **Validation:** Check for accessibility (A11Y) and visual polish.
