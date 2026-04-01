@@ -114,6 +114,7 @@ class EphseedHeader extends HTMLElement {
                     <a href="index.html#hero">홈</a>
                     <a href="about.html">서비스 배경</a>
                     <a href="features.html">기능 소개</a>
+                    <a href="blog.html">운영 가이드</a>
                     <a href="index.html#pricing">요금제</a>
                     <a href="contact.html" class="btn-contact">상담 신청</a>
                 </nav>

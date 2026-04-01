@@ -6,43 +6,35 @@ Ephseed is a professional AI-based monitoring and control service designed for u
 ## Project Outline
 - **Target Audience:** Unattended store owners (study cafes, self-service stores).
 - **Multi-page Architecture:**
-    - `index.html`: Main landing page with process, core values, and FAQ.
-    - `about.html`: Detailed service background and problem diagnosis.
-    - `features.html`: Detailed technical features with expanded descriptions for AdSense quality.
+    - `index.html`: Main landing page with process, core values, FAQ, and Knowledge Hub preview.
+    - `about.html`: Detailed service background and mission.
+    - `features.html`: Detailed technical features with expert-level descriptions.
+    - `blog.html`: Knowledge Hub (Informative articles for store owners).
     - `contact.html`: Consultation request form.
-    - `admin.html`: Internal dashboard for managing inquiries.
-    - `privacy.html`: Privacy Policy (AdSense requirement).
-    - `terms.html`: Terms of Service (AdSense requirement).
+    - `admin.html`: Internal dashboard.
+    - `privacy.html` / `terms.html`: Mandatory legal pages.
+    - `404.html`: Branded error page for better navigation.
 - **Core Features:**
     - 24/7 Intelligent Monitoring (AI + Experts).
     - Real-time Remote Broadcasting for immediate response.
     - Tiered Pricing (Basic, Standard, Premium).
-- **Design Philosophy:**
-    - Professional, trustworthy, and modern aesthetic.
-    - Mobile-responsive layout using CSS Grid and Flexbox.
-    - High-quality visual effects: multi-layered shadows, subtle noise textures, vibrant color palette (OKLCH).
-    - Interactive components with "glow" effects.
-- **Technology Stack:**
-    - Framework-less: HTML5, CSS3, JavaScript (ES Modules).
-    - Web Components for encapsulation.
-    - Modern CSS (Baseline): Container queries, `:has()`, Cascade layers, Logical properties.
 
-## AdSense Optimization
-- **Original Content:** Expanded textual descriptions of AI technology and operational processes.
-- **Essential Pages:** Added Privacy Policy and Terms of Service.
-- **Navigation:** Clear, hierarchical navigation through custom `e-header` and `e-footer`.
-- **User Experience:** High-quality UI illustrations and responsive design.
+## AdSense Optimization (Part 2)
+- **User-Centric Value:** Added `blog.html` to provide actual management tips beyond self-promotion.
+- **Structural Integrity:** Implemented `404.html` to handle broken links gracefully as per Google guidelines.
+- **Navigation Depth:** Refined `e-header` to include all informational pages, ensuring no "thin content" traps.
+- **Passion & Expertise:** Expanded `about.html` and `features.html` with detailed, non-generic technical narratives.
 
 ## Current Plan & Steps
-1.  **Project Initialization:** Set up the base directory structure and `blueprint.md`. (Done)
-2.  **Core Structure Implementation:** Defined multi-page architecture. (Done)
-3.  **Theming & Base Styles (`style.css`):** (Done)
-4.  **Web Component Development (`main.js`):** (Done)
-5.  **Visual Illustration Implementation:** (Done)
-6.  **AdSense & Content Optimization:**
-    - Created `privacy.html` and `terms.html`. (Done)
-    - Expanded content in `features.html`. (Done)
-    - Enhanced SEO meta tags in `index.html`. (Done)
-7.  **Consultation Flow Implementation:** (Done)
-8.  **Responsive Optimization:** (Done)
-9.  **Validation:** Check for accessibility (A11Y) and visual polish.
+1.  **Project Initialization:** (Done)
+2.  **Core Structure & Multi-page:** (Done)
+3.  **Visual Illustration & Theming:** (Done)
+4.  **AdSense Optimization (Part 1 - Legal & Content):** (Done)
+5.  **AdSense Optimization (Part 2 - Value & Navigation):**
+    - Created `blog.html` (Knowledge Hub). (Done)
+    - Created `404.html` (Custom Error Page). (Done)
+    - Updated `index.html` with blog preview. (Done)
+    - Refined navigation in `main.js`. (Done)
+6.  **Consultation Flow & Telegram Notification:** (Done)
+7.  **Responsive Optimization:** (Done)
+8.  **Validation:** Final polish for AdSense readiness.
