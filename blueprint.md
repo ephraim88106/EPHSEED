@@ -37,4 +37,7 @@ Ephseed is a professional AI-based monitoring and control service designed for u
     - Refined navigation in `main.js`. (Done)
 6.  **Consultation Flow & Telegram Notification:** (Done)
 7.  **Responsive Optimization:** (Done)
-8.  **Validation:** Final polish for AdSense readiness.
+8.  **AdSense Finalization:**
+    - Created `ads.txt` with authorized seller information. (Done)
+    - Added Google AdSense account meta tag to all HTML files for verification. (Done)
+9.  **Validation:** Final polish for AdSense readiness.
