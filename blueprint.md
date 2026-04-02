@@ -9,7 +9,9 @@ Ephseed is a professional AI-based monitoring and control service designed for u
     - `index.html`: Main landing page with process, core values, FAQ, and Knowledge Hub preview.
     - `about.html`: Detailed service background and mission.
     - `features.html`: Detailed technical features with expert-level descriptions.
-    - `blog.html`: Knowledge Hub (Informative articles for store owners).
+    - `blog.html`: Knowledge Hub (Listing of informative articles).
+    - `post-noise-management.html`: Detailed guide on noise management.
+    - `post-cctv-strategy.html`: Detailed guide on CCTV placement.
     - `contact.html`: Consultation request form.
     - `admin.html`: Internal dashboard.
     - `privacy.html` / `terms.html`: Mandatory legal pages.
@@ -20,10 +22,9 @@ Ephseed is a professional AI-based monitoring and control service designed for u
     - Tiered Pricing (Basic, Standard, Premium).
 
 ## AdSense Optimization (Part 2)
-- **User-Centric Value:** Added `blog.html` to provide actual management tips beyond self-promotion.
-- **Structural Integrity:** Implemented `404.html` to handle broken links gracefully as per Google guidelines.
-- **Navigation Depth:** Refined `e-header` to include all informational pages, ensuring no "thin content" traps.
-- **Passion & Expertise:** Expanded `about.html` and `features.html` with detailed, non-generic technical narratives.
+- **User-Centric Value:** Added Knowledge Hub with actual management tips to provide high-quality, relevant content.
+- **Structural Integrity:** Implemented `404.html` and verified AdSense seller information via `ads.txt`.
+- **Navigation Depth:** Refined `e-header` and internal links to ensure smooth discovery of expert content.
 
 ## Current Plan & Steps
 1.  **Project Initialization:** (Done)
@@ -32,12 +33,12 @@ Ephseed is a professional AI-based monitoring and control service designed for u
 4.  **AdSense Optimization (Part 1 - Legal & Content):** (Done)
 5.  **AdSense Optimization (Part 2 - Value & Navigation):**
     - Created `blog.html` (Knowledge Hub). (Done)
-    - Created `404.html` (Custom Error Page). (Done)
-    - Updated `index.html` with blog preview. (Done)
-    - Refined navigation in `main.js`. (Done)
+    - Created actual blog post pages (`post-noise-management.html`, `post-cctv-strategy.html`). (Done)
+    - Updated `index.html` to link to specific articles. (Done)
+    - Created `404.html`. (Done)
 6.  **Consultation Flow & Telegram Notification:** (Done)
 7.  **Responsive Optimization:** (Done)
 8.  **AdSense Finalization:**
-    - Created `ads.txt` with authorized seller information. (Done)
-    - Added Google AdSense account meta tag to all HTML files for verification. (Done)
+    - Created `ads.txt`. (Done)
+    - Added AdSense account meta tag to all HTML files. (Done)
 9.  **Validation:** Final polish for AdSense readiness.
