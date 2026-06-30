@@ -169,22 +169,15 @@
             return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // 기본 가입자 계정 (관리자 페이지에서 추가한 계정과 병합)
-        const DEFAULT_SUBSCRIBERS = [
-            { userId: 'EP-374', loginId: 'mango7',   displayName: '회원1', passwordHash: '1a4e7db2ff7842c5eb00576f961dc47aafa21e5e0f3b120f855b92d0985c6f81', storeName: '1호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
-            { userId: 'EP-851', loginId: 'skyblue3', displayName: '회원2', passwordHash: '9d39db0466a2091f88c5f0ad9cd3d8341bdebd808c8ccbe0342889038fc8b241', storeName: '2호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
-            { userId: 'EP-629', loginId: 'nova52',   displayName: '회원3', passwordHash: 'bd452368394d1d9f3e58fbcd1526624ac58cd42ca191ba7427ca1c97ec119504', storeName: '3호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
-            { userId: 'EP-213', loginId: 'tide91',   displayName: '회원4', passwordHash: 'ced71c79e536862963c9d02e2b6797b9f23a0993c8bb4be6f1a50f8dd4d75c47', storeName: '4호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
-            { userId: 'EP-413', loginId: 'tiger87',  displayName: '회원5', passwordHash: '2712e2d18d18cf5d2a924655de2c93d89da76d3fe00a6ea31a5f795231a5c507', storeName: '5호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
-        ];
+        const SUBS_URL = 'https://raw.githubusercontent.com/ephraim88106/EPHSEED/main/subscribers.json';
 
-        function getSubscribers() {
-            const stored = JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
-            // 기본 계정 중 아직 없는 것만 병합
-            const storedIds = new Set(stored.map(s => s.userId));
-            const merged = [...stored];
-            DEFAULT_SUBSCRIBERS.forEach(d => { if (!storedIds.has(d.userId)) merged.push(d); });
-            return merged;
+        async function getSubscribers() {
+            try {
+                const res = await fetch(SUBS_URL + '?t=' + Date.now());
+                if (res.ok) return await res.json();
+            } catch(e) {}
+            // 네트워크 오류 시 캐시 사용
+            return JSON.parse(localStorage.getItem('ephseed_subs_cache') || '[]');
         }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -199,11 +192,21 @@
             submitBtn.disabled = true;
 
             const passwordHash = await hashPassword(password);
-            const subscribers = getSubscribers();
-            const subscriber = subscribers.find(s => s.loginId === loginId && s.passwordHash === passwordHash);
+            const subscribers = await getSubscribers();
 
+            // 캐시 갱신
+            localStorage.setItem('ephseed_subs_cache', JSON.stringify(subscribers));
+
+            const subscriber = subscribers.find(s => s.loginId === loginId);
             if (subscriber) {
-                if (!subscriber.active) {
+                // 회원이 변경한 비밀번호가 있으면 우선 적용
+                const pwOverride = localStorage.getItem('ephseed_pw_' + loginId);
+                const validHash = pwOverride || subscriber.passwordHash;
+
+                if (passwordHash !== validHash) {
+                    errorMsg.textContent = '아이디 또는 비밀번호가 올바르지 않습니다.';
+                    errorMsg.classList.add('show');
+                } else if (!subscriber.active) {
                     errorMsg.textContent = '비활성화된 계정입니다. 관리자에게 문의해주세요.';
                     errorMsg.classList.add('show');
                 } else {

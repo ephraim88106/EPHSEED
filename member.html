@@ -858,15 +858,18 @@
             const newHash = await hashPassword(newPw);
 
             const session = getSession();
-            const subscribers = getSubscribers();
-            const idx = subscribers.findIndex(s => s.loginId === session.loginId);
+            // 현재 비밀번호 확인: override가 있으면 override, 없으면 캐시에서
+            const pwOverride = localStorage.getItem('ephseed_pw_' + session.loginId);
+            const cached = JSON.parse(localStorage.getItem('ephseed_subs_cache') || '[]');
+            const sub = cached.find(s => s.loginId === session.loginId);
+            const validHash = pwOverride || (sub ? sub.passwordHash : null);
 
-            if (idx === -1 || subscribers[idx].passwordHash !== currentHash) {
+            if (!validHash || currentHash !== validHash) {
                 errorEl.textContent = '현재 비밀번호가 올바르지 않습니다.';
                 errorEl.classList.add('show');
             } else {
-                subscribers[idx].passwordHash = newHash;
-                saveSubscribers(subscribers);
+                // 비밀번호를 localStorage override로 저장 (관리자 포털에서 관리되는 JSON과 별개)
+                localStorage.setItem('ephseed_pw_' + session.loginId, newHash);
                 successEl.textContent = '비밀번호가 성공적으로 변경되었습니다.';
                 successEl.classList.add('show');
                 document.getElementById('pwForm').reset();
