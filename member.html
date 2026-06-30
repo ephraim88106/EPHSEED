@@ -613,6 +613,19 @@
     </div>
 
     <script>
+        const TELEGRAM_BOT_TOKEN = '8729037979:AAFxfxv_k3ZuehM0mLlJjHYn5ASRlW4NFHQ';
+        const TELEGRAM_CHAT_ID = '8478291658';
+
+        async function sendToTelegram(text) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'HTML' })
+                });
+            } catch (e) { console.error('Telegram error', e); }
+        }
+
         const SALT = 'ephseed_secure_2026';
 
         async function hashPassword(password) {
@@ -777,7 +790,23 @@
             document.getElementById('sidebarStore').textContent = newStoreName || '—';
             document.getElementById('welcomeMsg').textContent = `안녕하세요, ${newName}님!`;
 
-            okEl.textContent = '정보가 저장되었습니다.';
+            // 텔레그램으로 관리자에게 전송
+            const feats = [];
+            if (serviceData.feat1) feats.push('오래 이용하는 고객 확인');
+            if (serviceData.feat2) feats.push('실시간 안내 방송');
+            if (serviceData.feat3) feats.push('사고 발생시 긴급 알림');
+            if (serviceData.feat4) feats.push('기타: ' + (serviceData.featOther || ''));
+
+            const msg = `📋 <b>[에브라임 시드] 회원 정보 업데이트</b>
+- 가입자 ID: ${updatedSession.userId}
+- 성함: ${newName}
+- 매장명: ${newStoreName || '—'}
+- 매장 종류: ${newStoreType}
+- CCTV 프로그램: ${serviceData.cctvProgram || '—'}
+- 원하는 기능: ${feats.length ? feats.join(', ') : '—'}`;
+            sendToTelegram(msg);
+
+            okEl.textContent = '정보가 저장되었습니다. 관리자에게 자동 전송되었습니다.';
             okEl.classList.add('show');
         });
 
