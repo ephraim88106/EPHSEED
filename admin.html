@@ -522,8 +522,13 @@
 
         function generateSubscriberId() {
             const list = getSubscribers();
-            const num = (list.length + 1).toString().padStart(4, '0');
-            return 'EP-' + num;
+            const existingIds = new Set(list.map(s => s.userId));
+            let id;
+            do {
+                const num = Math.floor(Math.random() * 900 + 100); // 100~999
+                id = 'EP-' + num;
+            } while (existingIds.has(id));
+            return id;
         }
 
         const planNames = { basic: '실속형', standard: '표준형', premium: '프리미엄' };
@@ -689,7 +694,7 @@
             existing.unshift(newSubscriber);
             saveSubscribers(existing);
 
-            successEl.textContent = `가입자 "${displayName}" (${newSubscriber.userId}) 등록 완료! 로그인 아이디: ${loginId}`;
+            successEl.textContent = `등록 완료! 가입자 ID: ${newSubscriber.userId} / 아이디: ${loginId} / 초기 비밀번호: ${password}`;
             successEl.classList.add('show');
             document.getElementById('createForm').reset();
             loadSubscribers();
