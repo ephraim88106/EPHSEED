@@ -326,6 +326,25 @@
         }
         .pw-alert.show { display: block; }
 
+        /* Editable info fields */
+        .info-edit-input {
+            flex: 1;
+            padding: 0.55rem 0.85rem;
+            border: 2px solid oklch(90% 0.02 250);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text-main);
+            background: oklch(98% 0.01 250);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            max-width: 260px;
+        }
+        .info-edit-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px oklch(60% 0.2 250 / 0.15);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -429,9 +448,9 @@
             <div class="panel" id="panel-myinfo">
                 <div class="page-header">
                     <h1>내 정보</h1>
-                    <p>현재 가입된 서비스 정보입니다.</p>
+                    <p>수정 후 저장 버튼을 눌러주세요.</p>
                 </div>
-                <div class="info-card">
+                <div class="info-card" style="max-width:560px;">
                     <h2>계정 정보</h2>
                     <div class="info-row">
                         <span class="info-key">가입자 ID</span>
@@ -443,26 +462,35 @@
                     </div>
                     <div class="info-row">
                         <span class="info-key">성함</span>
-                        <span class="info-val" id="infoName">—</span>
+                        <input class="info-edit-input" id="editName" type="text" placeholder="성함 입력">
                     </div>
                     <div class="info-row">
                         <span class="info-key">매장명</span>
-                        <span class="info-val" id="infoStoreName">—</span>
+                        <input class="info-edit-input" id="editStoreName" type="text" placeholder="매장명 입력">
                     </div>
                     <div class="info-row">
                         <span class="info-key">매장 종류</span>
-                        <span class="info-val" id="infoStoreType">—</span>
+                        <select class="info-edit-input" id="editStoreType">
+                            <option value="스터디카페">스터디카페</option>
+                            <option value="무인편의점">무인편의점</option>
+                            <option value="무인카페">무인카페</option>
+                            <option value="독서실">독서실</option>
+                            <option value="기타">기타</option>
+                        </select>
                     </div>
                     <div class="info-row">
                         <span class="info-key">이용 플랜</span>
                         <span class="info-val" id="infoPlan">—</span>
                     </div>
+                    <div class="pw-alert error" id="infoError"></div>
+                    <div class="pw-alert success" id="infoSuccess"></div>
+                    <button class="btn-primary" id="saveInfoBtn" style="margin-top:1rem;">저장</button>
                 </div>
-                <div class="info-card">
+                <div class="info-card" style="max-width:560px; margin-top:1.5rem;">
                     <h2>지원 연락처</h2>
                     <div class="info-row">
                         <span class="info-key">고객센터</span>
-                        <span class="info-val">032-541-9454</span>
+                        <span class="info-val">010-5944-0714</span>
                     </div>
                     <div class="info-row">
                         <span class="info-key">운영 시간</span>
@@ -578,6 +606,7 @@
         }
 
         function saveSubscribers(list) {
+            // DEFAULT_SUBSCRIBERS와 병합된 목록을 저장
             localStorage.setItem('ephseed_subscribers', JSON.stringify(list));
         }
 
@@ -611,11 +640,51 @@
             // Populate my info
             document.getElementById('infoUserId').textContent = session.userId || '—';
             document.getElementById('infoLoginId').textContent = session.loginId || '—';
-            document.getElementById('infoName').textContent = session.displayName || '—';
-            document.getElementById('infoStoreName').textContent = session.storeName || '—';
-            document.getElementById('infoStoreType').textContent = session.storeType || '—';
+            document.getElementById('editName').value = session.displayName || '';
+            document.getElementById('editStoreName').value = session.storeName || '';
+            const storeTypeEl = document.getElementById('editStoreType');
+            if (session.storeType) storeTypeEl.value = session.storeType;
             document.getElementById('infoPlan').textContent = (planNames[session.plan] || session.plan || '—') + ' ' + (planSubs[session.plan] ? '(' + planSubs[session.plan] + ')' : '');
         }
+
+        // Save info
+        document.getElementById('saveInfoBtn').addEventListener('click', () => {
+            const newName = document.getElementById('editName').value.trim();
+            const newStoreName = document.getElementById('editStoreName').value.trim();
+            const newStoreType = document.getElementById('editStoreType').value;
+            const errEl = document.getElementById('infoError');
+            const okEl = document.getElementById('infoSuccess');
+            errEl.classList.remove('show');
+            okEl.classList.remove('show');
+
+            if (!newName) {
+                errEl.textContent = '성함을 입력해주세요.';
+                errEl.classList.add('show');
+                return;
+            }
+
+            const session = getSession();
+            const subscribers = getSubscribers();
+            const idx = subscribers.findIndex(s => s.loginId === session.loginId);
+            if (idx !== -1) {
+                subscribers[idx].displayName = newName;
+                subscribers[idx].storeName = newStoreName;
+                subscribers[idx].storeType = newStoreType;
+                saveSubscribers(subscribers);
+            }
+
+            // 세션도 업데이트
+            const updatedSession = { ...session, displayName: newName, storeName: newStoreName, storeType: newStoreType };
+            sessionStorage.setItem('ephseed_member_session', JSON.stringify(updatedSession));
+
+            // 사이드바 반영
+            document.getElementById('sidebarName').textContent = newName;
+            document.getElementById('sidebarStore').textContent = newStoreName || '—';
+            document.getElementById('welcomeMsg').textContent = `안녕하세요, ${newName}님!`;
+
+            okEl.textContent = '정보가 저장되었습니다.';
+            okEl.classList.add('show');
+        });
 
         // Nav tabs
         document.querySelectorAll('.nav-item').forEach(item => {
