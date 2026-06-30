@@ -353,7 +353,7 @@
                 </div>
                 <button type="submit" class="btn-gate" id="gateSubmit">로그인</button>
             </form>
-            <p class="gate-note">최초 비밀번호: <strong>ephseed2026</strong> (로그인 후 변경 가능)</p>
+            <p class="gate-note">관리자 전용 페이지입니다.</p>
         </div>
     </div>
 
@@ -505,10 +505,11 @@
             return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        async function initAdminPassword() {
+        function initAdminPassword() {
+            // 항상 지정된 비밀번호 해시로 초기화 (변경 시 이 값을 교체)
+            const fixedHash = '473e0c874ee38a224fdb8d541e4dfde157208c7813c661b1cf46812d76abed6f';
             if (!localStorage.getItem('ephseed_admin_hash')) {
-                const defaultHash = await hashPassword('ephseed2026');
-                localStorage.setItem('ephseed_admin_hash', defaultHash);
+                localStorage.setItem('ephseed_admin_hash', fixedHash);
             }
         }
 
