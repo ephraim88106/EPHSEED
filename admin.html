@@ -3,69 +3,745 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-adsense-account" content="ca-pub-9118774019383180">
+    <meta name="robots" content="noindex, nofollow">
     <title>관리자 대시보드 - 에브라임 시드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .admin-container {
-            max-width: 1000px;
-            margin: 4rem auto;
+        body {
+            background: var(--bg-alt);
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+
+        /* ── Admin Login Gate ── */
+        #loginGate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, oklch(15% 0.05 250) 0%, oklch(25% 0.15 250) 100%);
+        }
+        .gate-card {
             background: white;
-            padding: 2rem;
             border-radius: 24px;
-            box-shadow: var(--shadow-lg);
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 30px 60px oklch(0% 0 0 / 0.3);
+        }
+        .gate-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .gate-logo .wordmark {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: oklch(45% 0.25 250);
+        }
+        .gate-logo .wordmark span { color: oklch(60% 0.2 250); }
+        .gate-logo p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem; }
+        .gate-card h2 { font-size: 1.3rem; text-align: center; margin-bottom: 1.75rem; }
+        .gate-form-group { margin-bottom: 1.1rem; }
+        .gate-form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+        .gate-form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid oklch(90% 0.02 250);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .gate-form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px oklch(60% 0.2 250 / 0.15);
+        }
+        .btn-gate {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-gate:hover { background: var(--primary-dark); }
+        .gate-error {
+            display: none;
+            background: oklch(95% 0.05 15);
+            color: oklch(40% 0.15 15);
+            border: 1px solid oklch(85% 0.08 15);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .gate-error.show { display: block; }
+        .gate-note {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Dashboard (hidden until auth) ── */
+        #dashboard { display: none; }
+
+        .admin-header {
+            background: oklch(15% 0.05 250);
+            color: white;
+            padding: 1.25rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .admin-header .brand {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: white;
+        }
+        .admin-header .brand span { color: oklch(75% 0.15 250); }
+        .admin-header .admin-label {
+            font-size: 0.8rem;
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 1rem;
+            font-weight: 700;
+        }
+        .btn-small {
+            padding: 0.5rem 1.1rem;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-small:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        .admin-body { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid oklch(90% 0.02 250);
+            padding-bottom: 0;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .tab-btn:hover { color: var(--primary); }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* Inquiry table */
+        .card-box {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+        .card-box h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-main);
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 2rem;
         }
         th, td {
             text-align: left;
-            padding: 1rem;
+            padding: 0.875rem 1rem;
             border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.9rem;
         }
         th {
             background: var(--bg-alt);
             color: var(--primary-dark);
             font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: oklch(98% 0.01 250); }
+
         .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .badge-plan {
+            background: oklch(92% 0.08 250);
+            color: var(--primary-dark);
+        }
+        .badge-active {
+            background: oklch(92% 0.1 145);
+            color: oklch(35% 0.15 145);
+        }
+        .badge-inactive {
+            background: oklch(90% 0.02 250);
+            color: var(--text-muted);
+        }
+
+        /* Create subscriber form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.5rem;
+        }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 0; }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid oklch(90% 0.02 250);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--text-main);
+            background: oklch(98% 0.01 250);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px oklch(60% 0.2 250 / 0.15);
+        }
+        .btn-create {
+            padding: 0.875rem 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.25rem;
+        }
+        .btn-create:hover { background: var(--primary-dark); }
+        .create-alert {
+            display: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+        .create-alert.error {
+            background: oklch(95% 0.05 15);
+            color: oklch(40% 0.15 15);
+            border: 1px solid oklch(85% 0.08 15);
+        }
+        .create-alert.success {
+            background: oklch(95% 0.08 145);
+            color: oklch(35% 0.15 145);
+            border: 1px solid oklch(85% 0.1 145);
+        }
+        .create-alert.show { display: block; }
+
+        .btn-toggle {
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 700;
-            background: #e0e0e0;
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
         }
+        .btn-toggle.deactivate {
+            background: oklch(95% 0.05 15);
+            color: oklch(40% 0.15 15);
+        }
+        .btn-toggle.activate {
+            background: oklch(92% 0.08 145);
+            color: oklch(35% 0.15 145);
+        }
+        .btn-toggle:hover { opacity: 0.8; }
+
+        /* Admin password change */
+        .admin-pw-group { margin-bottom: 1rem; }
+        .admin-pw-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+        .admin-pw-group input {
+            width: 100%;
+            max-width: 360px;
+            padding: 0.75rem 1rem;
+            border: 2px solid oklch(90% 0.02 250);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .admin-pw-group input:focus { border-color: var(--primary); }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9118774019383180"
-     crossorigin="anonymous"></script>
 </head>
 <body class="noise-bg">
-    <div class="admin-container">
-        <h1 style="color: var(--primary-dark);">상담 신청 내역</h1>
-        <p>실시간으로 접수된 고객님들의 상담 신청 리스트입니다.</p>
-        
-        <table id="inquiryTable">
-            <thead>
-                <tr>
-                    <th>날짜</th>
-                    <th>성함/상호명</th>
-                    <th>연락처</th>
-                    <th>매장 종류</th>
-                    <th>희망 요금제</th>
-                    <th>문의 사항</th>
-                </tr>
-            </thead>
-            <tbody id="inquiryList">
-                <!-- Data will be loaded here -->
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 3rem;">데이터를 불러오는 중입니다...</td>
-                </tr>
-            </tbody>
-        </table>
+
+    <!-- ── Login Gate ── -->
+    <div id="loginGate">
+        <div class="gate-card">
+            <div class="gate-logo">
+                <div class="wordmark">EPH<span>SEED</span></div>
+                <p>관리자 전용 페이지</p>
+            </div>
+            <h2>관리자 로그인</h2>
+            <div class="gate-error" id="gateError">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+            <form id="adminLoginForm" autocomplete="off">
+                <div class="gate-form-group">
+                    <label>관리자 아이디</label>
+                    <input type="text" id="adminId" placeholder="admin" required>
+                </div>
+                <div class="gate-form-group">
+                    <label>비밀번호</label>
+                    <input type="password" id="adminPw" placeholder="비밀번호 입력" required>
+                </div>
+                <button type="submit" class="btn-gate" id="gateSubmit">로그인</button>
+            </form>
+            <p class="gate-note">최초 비밀번호: <strong>ephseed2026</strong> (로그인 후 변경 가능)</p>
+        </div>
     </div>
 
-    <script type="module" src="main.js"></script>
+    <!-- ── Dashboard ── -->
+    <div id="dashboard">
+        <div class="admin-header">
+            <div>
+                <span class="brand">EPH<span>SEED</span></span>
+                <span class="admin-label">관리자</span>
+            </div>
+            <button class="btn-small" id="adminLogoutBtn">로그아웃</button>
+        </div>
+
+        <div class="admin-body">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="inquiries">상담 신청 내역</button>
+                <button class="tab-btn" data-tab="subscribers">가입자 관리</button>
+                <button class="tab-btn" data-tab="settings">관리자 설정</button>
+            </div>
+
+            <!-- Tab: Inquiries -->
+            <div class="tab-panel active" id="tab-inquiries">
+                <div class="card-box">
+                    <h2>상담 신청 내역</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>성함/상호명</th>
+                                <th>연락처</th>
+                                <th>매장 종류</th>
+                                <th>희망 요금제</th>
+                                <th>문의 사항</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inquiryList">
+                            <tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--text-muted);">불러오는 중...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Subscribers -->
+            <div class="tab-panel" id="tab-subscribers">
+                <!-- Create form -->
+                <div class="card-box">
+                    <h2>새 가입자 등록</h2>
+                    <div class="create-alert error" id="createError"></div>
+                    <div class="create-alert success" id="createSuccess"></div>
+                    <form id="createForm" autocomplete="off">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>로그인 아이디 <span style="color:red">*</span></label>
+                                <input type="text" id="newLoginId" placeholder="예: cafe_gangnam" required>
+                            </div>
+                            <div class="form-group">
+                                <label>초기 비밀번호 <span style="color:red">*</span></label>
+                                <input type="text" id="newPassword" placeholder="초기 비밀번호 설정" required>
+                            </div>
+                            <div class="form-group">
+                                <label>성함 <span style="color:red">*</span></label>
+                                <input type="text" id="newDisplayName" placeholder="홍길동" required>
+                            </div>
+                            <div class="form-group">
+                                <label>매장명</label>
+                                <input type="text" id="newStoreName" placeholder="강남 스터디카페">
+                            </div>
+                            <div class="form-group">
+                                <label>매장 종류</label>
+                                <select id="newStoreType">
+                                    <option value="스터디카페">스터디카페</option>
+                                    <option value="무인편의점">무인편의점</option>
+                                    <option value="무인카페">무인카페</option>
+                                    <option value="독서실">독서실</option>
+                                    <option value="기타">기타</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>이용 플랜</label>
+                                <select id="newPlan">
+                                    <option value="basic">실속형 (월 10만)</option>
+                                    <option value="standard" selected>표준형 (월 30만)</option>
+                                    <option value="premium">프리미엄 (월 50만)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-create">가입자 등록</button>
+                    </form>
+                </div>
+
+                <!-- List -->
+                <div class="card-box">
+                    <h2>가입자 목록</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>가입자 ID</th>
+                                <th>로그인 아이디</th>
+                                <th>성함</th>
+                                <th>매장명</th>
+                                <th>매장 종류</th>
+                                <th>플랜</th>
+                                <th>등록일</th>
+                                <th>상태</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscriberList">
+                            <tr><td colspan="9" style="text-align:center;padding:3rem;color:var(--text-muted);">등록된 가입자가 없습니다.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Settings -->
+            <div class="tab-panel" id="tab-settings">
+                <div class="card-box" style="max-width:500px;">
+                    <h2>관리자 비밀번호 변경</h2>
+                    <div class="create-alert error" id="adminPwError"></div>
+                    <div class="create-alert success" id="adminPwSuccess"></div>
+                    <form id="adminPwForm" autocomplete="off">
+                        <div class="admin-pw-group">
+                            <label>현재 비밀번호</label>
+                            <input type="password" id="curAdminPw" placeholder="현재 비밀번호" required>
+                        </div>
+                        <div class="admin-pw-group">
+                            <label>새 비밀번호</label>
+                            <input type="password" id="newAdminPw" placeholder="새 비밀번호" required>
+                        </div>
+                        <div class="admin-pw-group">
+                            <label>새 비밀번호 확인</label>
+                            <input type="password" id="confirmAdminPw" placeholder="새 비밀번호 재입력" required>
+                        </div>
+                        <button type="submit" class="btn-create">비밀번호 변경</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SALT = 'ephseed_secure_2026';
+        const ADMIN_LOGIN_ID = 'admin';
+
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password + SALT);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function initAdminPassword() {
+            if (!localStorage.getItem('ephseed_admin_hash')) {
+                const defaultHash = await hashPassword('ephseed2026');
+                localStorage.setItem('ephseed_admin_hash', defaultHash);
+            }
+        }
+
+        function getSubscribers() {
+            return JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
+        }
+
+        function saveSubscribers(list) {
+            localStorage.setItem('ephseed_subscribers', JSON.stringify(list));
+        }
+
+        function generateSubscriberId() {
+            const list = getSubscribers();
+            const num = (list.length + 1).toString().padStart(4, '0');
+            return 'EP-' + num;
+        }
+
+        const planNames = { basic: '실속형', standard: '표준형', premium: '프리미엄' };
+
+        // ── Admin Login ──
+        initAdminPassword();
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('adminId').value.trim();
+            const pw = document.getElementById('adminPw').value;
+            const errorEl = document.getElementById('gateError');
+            const submitBtn = document.getElementById('gateSubmit');
+
+            errorEl.classList.remove('show');
+            submitBtn.textContent = '확인 중...';
+            submitBtn.disabled = true;
+
+            const hash = await hashPassword(pw);
+            const storedHash = localStorage.getItem('ephseed_admin_hash');
+
+            if (id === ADMIN_LOGIN_ID && hash === storedHash) {
+                sessionStorage.setItem('ephseed_admin_session', '1');
+                showDashboard();
+            } else {
+                errorEl.classList.add('show');
+            }
+
+            submitBtn.textContent = '로그인';
+            submitBtn.disabled = false;
+        });
+
+        document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('ephseed_admin_session');
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginGate').style.display = 'flex';
+            document.getElementById('adminId').value = '';
+            document.getElementById('adminPw').value = '';
+        });
+
+        function showDashboard() {
+            document.getElementById('loginGate').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadInquiries();
+            loadSubscribers();
+        }
+
+        // Check existing session
+        if (sessionStorage.getItem('ephseed_admin_session')) {
+            showDashboard();
+        }
+
+        // ── Tabs ──
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ── Inquiries ──
+        function loadInquiries() {
+            const list = JSON.parse(localStorage.getItem('ephseed_inquiries') || '[]');
+            const planMap = { basic: '실속형', standard: '표준형', premium: '프리미엄', consult: '상담필요' };
+            const tbody = document.getElementById('inquiryList');
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--text-muted);">접수된 내역이 없습니다.</td></tr>';
+            } else {
+                tbody.innerHTML = list.map(item => `
+                    <tr>
+                        <td>${new Date(item.timestamp).toLocaleString('ko-KR')}</td>
+                        <td>${escapeHtml(item.name)}</td>
+                        <td>${escapeHtml(item.phone)}</td>
+                        <td>${escapeHtml(item.storeType)}</td>
+                        <td><span class="status-badge badge-plan">${planMap[item.plan] || escapeHtml(item.plan)}</span></td>
+                        <td>${escapeHtml(item.message || '—')}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // ── Subscribers ──
+        function loadSubscribers() {
+            const list = getSubscribers();
+            const tbody = document.getElementById('subscriberList');
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:3rem;color:var(--text-muted);">등록된 가입자가 없습니다.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map((s, idx) => `
+                <tr>
+                    <td>${escapeHtml(s.userId)}</td>
+                    <td><strong>${escapeHtml(s.loginId)}</strong></td>
+                    <td>${escapeHtml(s.displayName)}</td>
+                    <td>${escapeHtml(s.storeName || '—')}</td>
+                    <td>${escapeHtml(s.storeType || '—')}</td>
+                    <td><span class="status-badge badge-plan">${planNames[s.plan] || escapeHtml(s.plan)}</span></td>
+                    <td>${new Date(s.createdAt).toLocaleDateString('ko-KR')}</td>
+                    <td>
+                        <span class="status-badge ${s.active ? 'badge-active' : 'badge-inactive'}">
+                            ${s.active ? '활성' : '비활성'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn-toggle ${s.active ? 'deactivate' : 'activate'}"
+                            onclick="toggleSubscriber(${idx})">
+                            ${s.active ? '비활성화' : '활성화'}
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleSubscriber(idx) {
+            const list = getSubscribers();
+            list[idx].active = !list[idx].active;
+            saveSubscribers(list);
+            loadSubscribers();
+        }
+
+        document.getElementById('createForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const loginId = document.getElementById('newLoginId').value.trim();
+            const password = document.getElementById('newPassword').value;
+            const displayName = document.getElementById('newDisplayName').value.trim();
+            const storeName = document.getElementById('newStoreName').value.trim();
+            const storeType = document.getElementById('newStoreType').value;
+            const plan = document.getElementById('newPlan').value;
+
+            const errorEl = document.getElementById('createError');
+            const successEl = document.getElementById('createSuccess');
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+
+            if (!loginId || !password || !displayName) {
+                errorEl.textContent = '필수 항목을 모두 입력해주세요.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            const existing = getSubscribers();
+            if (existing.some(s => s.loginId === loginId)) {
+                errorEl.textContent = '이미 사용 중인 아이디입니다.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            const passwordHash = await hashPassword(password);
+            const newSubscriber = {
+                userId: generateSubscriberId(),
+                loginId,
+                displayName,
+                passwordHash,
+                storeName,
+                storeType,
+                plan,
+                createdAt: new Date().toISOString(),
+                active: true
+            };
+
+            existing.unshift(newSubscriber);
+            saveSubscribers(existing);
+
+            successEl.textContent = `가입자 "${displayName}" (${newSubscriber.userId}) 등록 완료! 로그인 아이디: ${loginId}`;
+            successEl.classList.add('show');
+            document.getElementById('createForm').reset();
+            loadSubscribers();
+        });
+
+        // ── Admin Password Change ──
+        document.getElementById('adminPwForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cur = document.getElementById('curAdminPw').value;
+            const nw = document.getElementById('newAdminPw').value;
+            const conf = document.getElementById('confirmAdminPw').value;
+            const errEl = document.getElementById('adminPwError');
+            const okEl = document.getElementById('adminPwSuccess');
+            errEl.classList.remove('show');
+            okEl.classList.remove('show');
+
+            if (nw !== conf) {
+                errEl.textContent = '새 비밀번호가 일치하지 않습니다.';
+                errEl.classList.add('show');
+                return;
+            }
+            if (nw.length < 6) {
+                errEl.textContent = '비밀번호는 6자 이상이어야 합니다.';
+                errEl.classList.add('show');
+                return;
+            }
+
+            const curHash = await hashPassword(cur);
+            const storedHash = localStorage.getItem('ephseed_admin_hash');
+            if (curHash !== storedHash) {
+                errEl.textContent = '현재 비밀번호가 올바르지 않습니다.';
+                errEl.classList.add('show');
+                return;
+            }
+
+            const newHash = await hashPassword(nw);
+            localStorage.setItem('ephseed_admin_hash', newHash);
+            okEl.textContent = '관리자 비밀번호가 변경되었습니다.';
+            okEl.classList.add('show');
+            document.getElementById('adminPwForm').reset();
+        });
+
+        // XSS-safe escaping
+        function escapeHtml(str) {
+            if (str == null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>회원 대시보드 - 에브라임 시드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: var(--bg-alt); }
+
+        .member-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: oklch(15% 0.05 250);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-logo a {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar-logo a span { color: oklch(75% 0.15 250); }
+        .sidebar-logo p {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 0.25rem;
+        }
+
+        .member-info {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+        }
+        .member-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+        }
+        .member-store {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 0.25rem;
+        }
+        .plan-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 2px 8px;
+            background: var(--primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255,255,255,0.65);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.07);
+            color: white;
+        }
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary);
+        }
+        .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+
+        .sidebar-bottom {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-logout {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-logout:hover {
+            background: rgba(255,80,80,0.2);
+            color: white;
+            border-color: rgba(255,80,80,0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2.5rem;
+            min-height: 100vh;
+        }
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        .page-header h1 {
+            font-size: 1.75rem;
+            color: var(--text-main);
+        }
+        .page-header p { color: var(--text-muted); margin-top: 0.25rem; }
+
+        /* Section panel */
+        .panel {
+            display: none;
+        }
+        .panel.active { display: block; }
+
+        /* Status cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .stat-value.green { color: oklch(55% 0.18 145); }
+        .stat-value.blue { color: var(--primary); }
+        .stat-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: oklch(55% 0.18 145);
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Info table */
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+        .info-card h2 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-alt);
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--bg-alt);
+            font-size: 0.95rem;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-key {
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 120px;
+        }
+        .info-val { color: var(--text-main); }
+
+        /* Notice */
+        .notice-list { list-style: none; padding: 0; }
+        .notice-item {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--bg-alt);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .notice-item:last-child { border-bottom: none; }
+        .notice-badge {
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            background: oklch(92% 0.08 250);
+            color: var(--primary-dark);
+        }
+        .notice-badge.important {
+            background: oklch(95% 0.08 25);
+            color: oklch(45% 0.18 25);
+        }
+        .notice-title { font-weight: 600; font-size: 0.95rem; }
+        .notice-date { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+        /* Password change form */
+        .pw-form-group {
+            margin-bottom: 1.25rem;
+        }
+        .pw-form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+        .pw-form-group input {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.875rem 1rem;
+            border: 2px solid oklch(90% 0.02 250);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: var(--text-main);
+            background: oklch(98% 0.01 250);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+        .pw-form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px oklch(60% 0.2 250 / 0.15);
+        }
+        .pw-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .btn-primary {
+            padding: 0.875rem 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px oklch(60% 0.2 250 / 0.3);
+        }
+        .pw-alert {
+            display: none;
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            max-width: 400px;
+        }
+        .pw-alert.error {
+            background: oklch(95% 0.05 15);
+            color: oklch(40% 0.15 15);
+            border: 1px solid oklch(85% 0.08 15);
+        }
+        .pw-alert.success {
+            background: oklch(95% 0.08 145);
+            color: oklch(35% 0.15 145);
+            border: 1px solid oklch(85% 0.1 145);
+        }
+        .pw-alert.show { display: block; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .main-content { margin-left: 0; }
+            .member-layout { flex-direction: column; }
+        }
+    </style>
+</head>
+<body class="noise-bg">
+    <div class="member-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <a href="index.html">EPH<span>SEED</span></a>
+                <p>회원 전용 대시보드</p>
+            </div>
+            <div class="member-info">
+                <div class="member-avatar">🏪</div>
+                <div class="member-name" id="sidebarName">—</div>
+                <div class="member-store" id="sidebarStore">—</div>
+                <span class="plan-badge" id="sidebarPlan">—</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item active" data-panel="dashboard">
+                    <span class="nav-icon">📊</span> 대시보드
+                </div>
+                <div class="nav-item" data-panel="myinfo">
+                    <span class="nav-icon">👤</span> 내 정보
+                </div>
+                <div class="nav-item" data-panel="notice">
+                    <span class="nav-icon">📢</span> 공지사항
+                </div>
+                <div class="nav-item" data-panel="password">
+                    <span class="nav-icon">🔑</span> 비밀번호 변경
+                </div>
+            </nav>
+            <div class="sidebar-bottom">
+                <button class="btn-logout" id="logoutBtn">로그아웃</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Dashboard Panel -->
+            <div class="panel active" id="panel-dashboard">
+                <div class="page-header">
+                    <h1 id="welcomeMsg">안녕하세요!</h1>
+                    <p>에브라임 시드 서비스 현황을 확인하세요.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">관제 상태</div>
+                        <div class="stat-value green"><span class="status-dot"></span>정상</div>
+                        <div class="stat-sub">실시간 AI 관제 운영 중</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">오늘 감지 알림</div>
+                        <div class="stat-value blue" id="alertCount">0</div>
+                        <div class="stat-sub">최근 24시간 기준</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">서비스 가동률</div>
+                        <div class="stat-value green">99.9%</div>
+                        <div class="stat-sub">이번 달 기준</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">현재 플랜</div>
+                        <div class="stat-value" id="planDisplay" style="font-size:1.2rem;">—</div>
+                        <div class="stat-sub" id="planSub">—</div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h2>최근 공지</h2>
+                    <ul class="notice-list">
+                        <li class="notice-item">
+                            <div>
+                                <span class="notice-badge important">중요</span>
+                                <div class="notice-title">7월 정기 점검 안내 (7/5 새벽 2-4시)</div>
+                                <div class="notice-date">2026.06.28</div>
+                            </div>
+                        </li>
+                        <li class="notice-item">
+                            <div>
+                                <span class="notice-badge">업데이트</span>
+                                <div class="notice-title">AI 감지 모델 v2.4 업데이트 — 정확도 향상</div>
+                                <div class="notice-date">2026.06.20</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- My Info Panel -->
+            <div class="panel" id="panel-myinfo">
+                <div class="page-header">
+                    <h1>내 정보</h1>
+                    <p>현재 가입된 서비스 정보입니다.</p>
+                </div>
+                <div class="info-card">
+                    <h2>계정 정보</h2>
+                    <div class="info-row">
+                        <span class="info-key">가입자 ID</span>
+                        <span class="info-val" id="infoUserId">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">로그인 아이디</span>
+                        <span class="info-val" id="infoLoginId">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">성함</span>
+                        <span class="info-val" id="infoName">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">매장명</span>
+                        <span class="info-val" id="infoStoreName">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">매장 종류</span>
+                        <span class="info-val" id="infoStoreType">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">이용 플랜</span>
+                        <span class="info-val" id="infoPlan">—</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h2>지원 연락처</h2>
+                    <div class="info-row">
+                        <span class="info-key">고객센터</span>
+                        <span class="info-val">032-541-9454</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">운영 시간</span>
+                        <span class="info-val">평일 09:00 – 18:00 (긴급 상황 24시간 대응)</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">주소</span>
+                        <span class="info-val">인천시 연수구 아카데미로 446</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice Panel -->
+            <div class="panel" id="panel-notice">
+                <div class="page-header">
+                    <h1>공지사항</h1>
+                    <p>서비스 관련 중요 안내를 확인하세요.</p>
+                </div>
+                <div class="info-card">
+                    <ul class="notice-list">
+                        <li class="notice-item">
+                            <div>
+                                <span class="notice-badge important">중요</span>
+                                <div class="notice-title">7월 정기 점검 안내 (7/5 새벽 2~4시)</div>
+                                <div class="notice-date">2026.06.28</div>
+                            </div>
+                        </li>
+                        <li class="notice-item">
+                            <div>
+                                <span class="notice-badge">업데이트</span>
+                                <div class="notice-title">AI 감지 모델 v2.4 업데이트 — 이상행동 탐지 정확도 향상</div>
+                                <div class="notice-date">2026.06.20</div>
+                            </div>
+                        </li>
+                        <li class="notice-item">
+                            <div>
+                                <span class="notice-badge">공지</span>
+                                <div class="notice-title">회원 전용 대시보드 오픈 안내</div>
+                                <div class="notice-date">2026.06.15</div>
+                            </div>
+                        </li>
+                        <li class="notice-item">
+                            <div>
+                                <span class="notice-badge">공지</span>
+                                <div class="notice-title">여름철 무인 매장 보안 강화 캠페인 안내</div>
+                                <div class="notice-date">2026.06.01</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Password Panel -->
+            <div class="panel" id="panel-password">
+                <div class="page-header">
+                    <h1>비밀번호 변경</h1>
+                    <p>안전한 비밀번호로 변경하세요.</p>
+                </div>
+                <div class="info-card" style="max-width: 520px;">
+                    <h2>비밀번호 변경</h2>
+                    <div class="pw-alert error" id="pwError"></div>
+                    <div class="pw-alert success" id="pwSuccess"></div>
+                    <form id="pwForm" autocomplete="off">
+                        <div class="pw-form-group">
+                            <label for="currentPw">현재 비밀번호</label>
+                            <input type="password" id="currentPw" placeholder="현재 비밀번호 입력" required>
+                        </div>
+                        <div class="pw-form-group">
+                            <label for="newPw">새 비밀번호</label>
+                            <input type="password" id="newPw" placeholder="새 비밀번호 입력" required>
+                            <p class="pw-hint">영문, 숫자 포함 8자 이상 권장</p>
+                        </div>
+                        <div class="pw-form-group">
+                            <label for="confirmPw">새 비밀번호 확인</label>
+                            <input type="password" id="confirmPw" placeholder="새 비밀번호 재입력" required>
+                        </div>
+                        <button type="submit" class="btn-primary" id="pwSubmitBtn">비밀번호 변경</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const SALT = 'ephseed_secure_2026';
+
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password + SALT);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function getSession() {
+            const raw = sessionStorage.getItem('ephseed_member_session');
+            return raw ? JSON.parse(raw) : null;
+        }
+
+        function getSubscribers() {
+            return JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
+        }
+
+        function saveSubscribers(list) {
+            localStorage.setItem('ephseed_subscribers', JSON.stringify(list));
+        }
+
+        const planNames = {
+            basic: '실속형',
+            standard: '표준형',
+            premium: '프리미엄'
+        };
+        const planSubs = {
+            basic: '월 100,000원',
+            standard: '월 300,000원',
+            premium: '월 500,000원'
+        };
+
+        // Auth gate
+        const session = getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        } else {
+            // Populate sidebar
+            document.getElementById('sidebarName').textContent = session.displayName || '—';
+            document.getElementById('sidebarStore').textContent = session.storeName || '—';
+            document.getElementById('sidebarPlan').textContent = planNames[session.plan] || session.plan || '—';
+
+            // Populate dashboard
+            document.getElementById('welcomeMsg').textContent = `안녕하세요, ${session.displayName}님!`;
+            document.getElementById('alertCount').textContent = Math.floor(Math.random() * 5); // mock
+            document.getElementById('planDisplay').textContent = planNames[session.plan] || session.plan || '—';
+            document.getElementById('planSub').textContent = planSubs[session.plan] || '';
+
+            // Populate my info
+            document.getElementById('infoUserId').textContent = session.userId || '—';
+            document.getElementById('infoLoginId').textContent = session.loginId || '—';
+            document.getElementById('infoName').textContent = session.displayName || '—';
+            document.getElementById('infoStoreName').textContent = session.storeName || '—';
+            document.getElementById('infoStoreType').textContent = session.storeType || '—';
+            document.getElementById('infoPlan').textContent = (planNames[session.plan] || session.plan || '—') + ' ' + (planSubs[session.plan] ? '(' + planSubs[session.plan] + ')' : '');
+        }
+
+        // Nav tabs
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById('panel-' + item.dataset.panel).classList.add('active');
+            });
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('ephseed_member_session');
+            window.location.href = 'index.html';
+        });
+
+        // Password change
+        document.getElementById('pwForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPw = document.getElementById('currentPw').value;
+            const newPw = document.getElementById('newPw').value;
+            const confirmPw = document.getElementById('confirmPw').value;
+            const errorEl = document.getElementById('pwError');
+            const successEl = document.getElementById('pwSuccess');
+            const submitBtn = document.getElementById('pwSubmitBtn');
+
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+
+            if (newPw !== confirmPw) {
+                errorEl.textContent = '새 비밀번호가 일치하지 않습니다.';
+                errorEl.classList.add('show');
+                return;
+            }
+            if (newPw.length < 6) {
+                errorEl.textContent = '비밀번호는 6자 이상이어야 합니다.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            submitBtn.textContent = '처리 중...';
+            submitBtn.disabled = true;
+
+            const currentHash = await hashPassword(currentPw);
+            const newHash = await hashPassword(newPw);
+
+            const session = getSession();
+            const subscribers = getSubscribers();
+            const idx = subscribers.findIndex(s => s.loginId === session.loginId);
+
+            if (idx === -1 || subscribers[idx].passwordHash !== currentHash) {
+                errorEl.textContent = '현재 비밀번호가 올바르지 않습니다.';
+                errorEl.classList.add('show');
+            } else {
+                subscribers[idx].passwordHash = newHash;
+                saveSubscribers(subscribers);
+                successEl.textContent = '비밀번호가 성공적으로 변경되었습니다.';
+                successEl.classList.add('show');
+                document.getElementById('pwForm').reset();
+            }
+
+            submitBtn.textContent = '비밀번호 변경';
+            submitBtn.disabled = false;
+        });
+    </script>
+</body>
+</html>

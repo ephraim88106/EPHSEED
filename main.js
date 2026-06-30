@@ -91,6 +91,18 @@ class EphseedHeader extends HTMLElement {
             nav a:hover {
                 color: oklch(60% 0.2 250);
             }
+            .btn-member {
+                border: 2px solid oklch(60% 0.2 250);
+                color: oklch(60% 0.2 250);
+                padding: 0.65rem 1.25rem;
+                border-radius: 50px;
+                font-weight: 700;
+                transition: all 0.3s ease;
+            }
+            .btn-member:hover {
+                background: oklch(60% 0.2 250);
+                color: white !important;
+            }
             .btn-contact {
                 background: oklch(60% 0.2 250);
                 color: white;
@@ -116,6 +128,7 @@ class EphseedHeader extends HTMLElement {
                     <a href="features.html">기능 소개</a>
                     <a href="blog.html">운영 가이드</a>
                     <a href="index.html#pricing">요금제</a>
+                    <a href="login.html" class="btn-member">회원 로그인</a>
                     <a href="contact.html" class="btn-contact">상담 신청</a>
                 </nav>
             </div>
