@@ -562,8 +562,19 @@
             return raw ? JSON.parse(raw) : null;
         }
 
+        const DEFAULT_SUBSCRIBERS = [
+            { userId: 'EP-374', loginId: 'mango7',   displayName: '회원1', passwordHash: 'ffdad873bbe3f318292432e928797b66a3c4b0a3ebaa8b3263c60cb732323414', storeName: '1호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-851', loginId: 'skyblue3', displayName: '회원2', passwordHash: '0935b9477dee645b6dfc0063a010c510d28f614f2210b4480ae61c03f4fbef59', storeName: '2호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-629', loginId: 'nova52',   displayName: '회원3', passwordHash: 'f2aad2a899184e38f78a4b1c16e0576ceffe07bf3dd2c48d6e0e3ec011f01a55', storeName: '3호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-213', loginId: 'tide91',   displayName: '회원4', passwordHash: '242a055866676af80b725361e3a50dd2abce04a717512570b1d8d4cef7a71463', storeName: '4호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+        ];
+
         function getSubscribers() {
-            return JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
+            const stored = JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
+            const storedIds = new Set(stored.map(s => s.userId));
+            const merged = [...stored];
+            DEFAULT_SUBSCRIBERS.forEach(d => { if (!storedIds.has(d.userId)) merged.push(d); });
+            return merged;
         }
 
         function saveSubscribers(list) {
