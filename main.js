@@ -422,8 +422,7 @@ class EphseedFooter extends HTMLElement {
                 <div>
                     <h4>연락처</h4>
                     <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
-                        인천시 연수구 아카데미로 446<br>
-                        Tel: 032-541-9454
+                        Tel: 010-5944-0714
                     </p>
                 </div>
             </div>
