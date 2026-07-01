@@ -730,7 +730,7 @@
             // 상황판 버튼: 관리자가 명시적으로 OFF하지 않으면 항상 표시
             if (localStorage.getItem('ephseed_dashboard_' + session.loginId) !== 'off') {
                 document.getElementById('cctvDashboardSection').style.display = 'block';
-                const dashUrl = 'https://demo.ephseed.ai/?key=YOUR_ACCESS_KEY_HERE';
+                const dashUrl = 'http://localhost:5001/?key=SHSIYVOiWeU04Tzt6bRc2A';
                 document.getElementById('ephraim-open-dashboard').addEventListener('click', function () {
                     window.open(dashUrl, 'ephraimCctvBoard', 'width=1280,height=820,menubar=no,toolbar=no,location=no,status=no');
                 });
