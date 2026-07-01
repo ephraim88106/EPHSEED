@@ -458,11 +458,12 @@
                                 <th>플랜</th>
                                 <th>등록일</th>
                                 <th>상태</th>
+                                <th>상황판</th>
                                 <th>관리</th>
                             </tr>
                         </thead>
                         <tbody id="subscriberList">
-                            <tr><td colspan="9" style="text-align:center;padding:3rem;color:var(--text-muted);">등록된 가입자가 없습니다.</td></tr>
+                            <tr><td colspan="10" style="text-align:center;padding:3rem;color:var(--text-muted);">등록된 가입자가 없습니다.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -621,7 +622,9 @@
                 tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:3rem;color:var(--text-muted);">등록된 가입자가 없습니다.</td></tr>';
                 return;
             }
-            tbody.innerHTML = list.map((s, idx) => `
+            tbody.innerHTML = list.map((s, idx) => {
+                const dashOn = localStorage.getItem('ephseed_dashboard_' + s.loginId) === 'on';
+                return `
                 <tr>
                     <td>${escapeHtml(s.userId)}</td>
                     <td><strong>${escapeHtml(s.loginId)}</strong></td>
@@ -636,19 +639,35 @@
                         </span>
                     </td>
                     <td>
+                        <button class="btn-toggle ${dashOn ? 'deactivate' : 'activate'}"
+                            onclick="toggleDashboard(${idx})">
+                            ${dashOn ? '🟢 ON' : '⚫ OFF'}
+                        </button>
+                    </td>
+                    <td>
                         <button class="btn-toggle ${s.active ? 'deactivate' : 'activate'}"
                             onclick="toggleSubscriber(${idx})">
                             ${s.active ? '비활성화' : '활성화'}
                         </button>
                     </td>
                 </tr>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function toggleSubscriber(idx) {
             const list = getSubscribers();
             list[idx].active = !list[idx].active;
             saveSubscribers(list);
+            loadSubscribers();
+        }
+
+        function toggleDashboard(idx) {
+            const list = getSubscribers();
+            const loginId = list[idx].loginId;
+            const key = 'ephseed_dashboard_' + loginId;
+            const current = localStorage.getItem(key) === 'on';
+            localStorage.setItem(key, current ? 'off' : 'on');
             loadSubscribers();
         }
 

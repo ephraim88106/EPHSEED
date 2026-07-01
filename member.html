@@ -361,6 +361,22 @@
             box-shadow: 0 0 0 3px oklch(60% 0.2 250 / 0.15);
         }
 
+        /* CCTV Dashboard button */
+        #ephraim-open-dashboard {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            background: #00d4ff;
+            color: #070c12;
+            font-weight: 700;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s ease;
+        }
+        #ephraim-open-dashboard:hover { background: #00e5ff; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -439,6 +455,16 @@
                         <div class="stat-sub" id="planSub">—</div>
                     </div>
                 </div>
+                <div id="cctvDashboardSection" style="display:none; margin-bottom:1.5rem;">
+                    <div class="info-card" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+                        <div>
+                            <h2 style="margin-bottom:0.25rem;">무인매장 상황판</h2>
+                            <p style="color:var(--text-muted); font-size:0.875rem; margin:0;">실시간 CCTV 상황판에서 현재 매장 상황을 확인하세요.</p>
+                        </div>
+                        <button id="ephraim-open-dashboard" type="button">📹 무인매장 상황판 열기</button>
+                    </div>
+                </div>
+
                 <div class="info-card">
                     <h2>최근 공지</h2>
                     <ul class="notice-list">
@@ -700,6 +726,15 @@
             // 세부 설정 복원
             loadServiceSettings(session.loginId);
             loadScreenshot(session.loginId);
+
+            // 상황판 버튼 활성 여부
+            if (localStorage.getItem('ephseed_dashboard_' + session.loginId) === 'on') {
+                document.getElementById('cctvDashboardSection').style.display = 'block';
+                const dashUrl = 'https://demo.ephseed.ai/?key=' + encodeURIComponent(session.userId);
+                document.getElementById('ephraim-open-dashboard').addEventListener('click', function () {
+                    window.open(dashUrl, 'ephraimCctvBoard', 'width=1280,height=820,menubar=no,toolbar=no,location=no,status=no');
+                });
+            }
         }
 
         // 기타 체크박스 → 입력창 토글
