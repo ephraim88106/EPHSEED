@@ -727,10 +727,10 @@
             loadServiceSettings(session.loginId);
             loadScreenshot(session.loginId);
 
-            // 상황판 버튼 활성 여부
-            if (localStorage.getItem('ephseed_dashboard_' + session.loginId) === 'on') {
+            // 상황판 버튼: 관리자가 명시적으로 OFF하지 않으면 항상 표시
+            if (localStorage.getItem('ephseed_dashboard_' + session.loginId) !== 'off') {
                 document.getElementById('cctvDashboardSection').style.display = 'block';
-                const dashUrl = 'https://demo.ephseed.ai/?key=' + encodeURIComponent(session.userId);
+                const dashUrl = 'https://demo.ephseed.ai/?key=YOUR_ACCESS_KEY_HERE';
                 document.getElementById('ephraim-open-dashboard').addEventListener('click', function () {
                     window.open(dashUrl, 'ephraimCctvBoard', 'width=1280,height=820,menubar=no,toolbar=no,location=no,status=no');
                 });

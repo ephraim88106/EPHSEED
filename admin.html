@@ -514,8 +514,20 @@
             }
         }
 
+        const DEFAULT_SUBSCRIBERS = [
+            { userId: 'EP-374', loginId: 'mango7',   displayName: '회원1', passwordHash: '1a4e7db2ff7842c5eb00576f961dc47aafa21e5e0f3b120f855b92d0985c6f81', storeName: '1호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-851', loginId: 'skyblue3', displayName: '회원2', passwordHash: '9d39db0466a2091f88c5f0ad9cd3d8341bdebd808c8ccbe0342889038fc8b241', storeName: '2호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-629', loginId: 'nova52',   displayName: '회원3', passwordHash: 'bd452368394d1d9f3e58fbcd1526624ac58cd42ca191ba7427ca1c97ec119504', storeName: '3호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-213', loginId: 'tide91',   displayName: '회원4', passwordHash: 'ced71c79e536862963c9d02e2b6797b9f23a0993c8bb4be6f1a50f8dd4d75c47', storeName: '4호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-413', loginId: 'tiger87',  displayName: '회원5', passwordHash: '2712e2d18d18cf5d2a924655de2c93d89da76d3fe00a6ea31a5f795231a5c507', storeName: '5호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+        ];
+
         function getSubscribers() {
-            return JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
+            const stored = JSON.parse(localStorage.getItem('ephseed_subscribers') || '[]');
+            const storedIds = new Set(stored.map(s => s.userId));
+            const merged = [...stored];
+            DEFAULT_SUBSCRIBERS.forEach(d => { if (!storedIds.has(d.userId)) merged.push(d); });
+            return merged;
         }
 
         function saveSubscribers(list) {
@@ -623,7 +635,7 @@
                 return;
             }
             tbody.innerHTML = list.map((s, idx) => {
-                const dashOn = localStorage.getItem('ephseed_dashboard_' + s.loginId) === 'on';
+                const dashOff = localStorage.getItem('ephseed_dashboard_' + s.loginId) === 'off';
                 return `
                 <tr>
                     <td>${escapeHtml(s.userId)}</td>
@@ -639,9 +651,9 @@
                         </span>
                     </td>
                     <td>
-                        <button class="btn-toggle ${dashOn ? 'deactivate' : 'activate'}"
+                        <button class="btn-toggle ${dashOff ? 'activate' : 'deactivate'}"
                             onclick="toggleDashboard(${idx})">
-                            ${dashOn ? '🟢 ON' : '⚫ OFF'}
+                            ${dashOff ? '⚫ OFF' : '🟢 ON'}
                         </button>
                     </td>
                     <td>
@@ -666,8 +678,11 @@
             const list = getSubscribers();
             const loginId = list[idx].loginId;
             const key = 'ephseed_dashboard_' + loginId;
-            const current = localStorage.getItem(key) === 'on';
-            localStorage.setItem(key, current ? 'off' : 'on');
+            if (localStorage.getItem(key) === 'off') {
+                localStorage.removeItem(key);
+            } else {
+                localStorage.setItem(key, 'off');
+            }
             loadSubscribers();
         }
 
