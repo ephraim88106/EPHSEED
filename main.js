@@ -266,6 +266,12 @@ class EphseedPricing extends HTMLElement {
                 font-weight: 500;
                 color: oklch(45% 0.02 250);
             }
+            .vat-note {
+                font-size: 0.75rem;
+                color: oklch(55% 0.02 250);
+                margin-top: -1.5rem;
+                margin-bottom: 1.5rem;
+            }
             ul {
                 list-style: none;
                 padding: 0;
@@ -315,6 +321,7 @@ class EphseedPricing extends HTMLElement {
             <h3>${plan}</h3>
             <p class="desc">${description}</p>
             <div class="price">월 ${price}<span>원</span></div>
+            <p class="vat-note">부가세 별도</p>
             <ul>
                 ${features.map(f => `<li>${f}</li>`).join('')}
             </ul>
