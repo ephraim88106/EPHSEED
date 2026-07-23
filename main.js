@@ -127,7 +127,7 @@ class EphseedHeader extends HTMLElement {
                     <a href="about.html">서비스 배경</a>
                     <a href="features.html">기능 소개</a>
                     <a href="blog.html">운영 가이드</a>
-                    <a href="index.html#pricing">요금제</a>
+                    <a href="products.html">상품 및 요금</a>
                     <a href="login.html" class="btn-member">회원 로그인</a>
                     <a href="contact.html" class="btn-contact">상담 신청</a>
                 </nav>
@@ -401,6 +401,15 @@ class EphseedFooter extends HTMLElement {
                 font-size: 0.8rem;
                 text-decoration: underline;
             }
+            .biz-info {
+                border-top: 1px solid rgba(255,255,255,0.1);
+                padding-top: 1.5rem;
+                margin-bottom: 1.5rem;
+                font-size: 0.8rem;
+                line-height: 1.8;
+                color: rgba(255,255,255,0.45);
+                text-align: center;
+            }
         </style>
         <footer>
             <div class="container">
@@ -413,8 +422,8 @@ class EphseedFooter extends HTMLElement {
                     <ul>
                         <li><a href="index.html#solution">지능형 관제</a></li>
                         <li><a href="index.html#solution">원격 방송</a></li>
+                        <li><a href="products.html">상품 및 요금 안내</a></li>
                         <li><a href="about.html">서비스 배경</a></li>
-                        <li><a href="#">맞춤형 컨설팅</a></li>
                     </ul>
                 </div>
                 <div>
@@ -423,21 +432,28 @@ class EphseedFooter extends HTMLElement {
                         <li><a href="#">자주 묻는 질문</a></li>
                         <li><a href="privacy.html">개인정보처리방침</a></li>
                         <li><a href="terms.html">이용 약관</a></li>
+                        <li><a href="refund.html">환불정책</a></li>
                         <li><a href="contact.html">1:1 문의</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>연락처</h4>
                     <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
-                        Tel: 010-5944-0714
+                        Tel: 010-5944-0714<br>
+                        Email: namho8816@naver.com
                     </p>
                 </div>
             </div>
             <div class="bottom">
+                <div class="biz-info">
+                    <p>상호: 에브라임 시드(Ephraim Seed) &nbsp;|&nbsp; 대표자: 김남호 &nbsp;|&nbsp; 사업자등록번호: 359-05-03748</p>
+                    <p>주소: 인천광역시 연수구 아카데미로 446 &nbsp;|&nbsp; 이메일: namho8816@naver.com &nbsp;|&nbsp; 전화: 010-5944-0714</p>
+                </div>
                 <div>&copy; 2026 Ephseed AI. All rights reserved.</div>
                 <div class="legal-links">
                     <a href="privacy.html">개인정보처리방침</a>
                     <a href="terms.html">이용약관</a>
+                    <a href="refund.html">환불정책</a>
                 </div>
             </div>
         </footer>
