@@ -644,7 +644,10 @@
                 <div style="max-width:480px; margin-top:1.25rem;">
                     <div class="pw-alert error" id="billingError"></div>
                     <div class="pw-alert success" id="billingSuccess"></div>
-                    <button class="btn-primary" id="registerCardBtn" type="button">카드 등록하기</button>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button class="btn-primary" id="registerCardBtn" type="button" data-method="card">신용카드로 등록하기</button>
+                        <button class="btn-primary" id="registerKakaoBtn" type="button" data-method="kakao" style="background:#FEE500; color:#191600;">카카오페이로 등록하기</button>
+                    </div>
                 </div>
             </div>
 
@@ -745,7 +748,8 @@
 
         // 포트원(PortOne) 결제 연동 정보 — storeId/channelKey는 공개 식별자로 클라이언트에 포함되어도 안전합니다.
         const PORTONE_STORE_ID = 'store-f5e552be-5741-4371-b879-753267102c61';
-        const PORTONE_CHANNEL_KEY = 'channel-key-3371510a-39ca-4bd7-b9b9-8673776e3492';
+        const PORTONE_CHANNEL_KEY_CARD = 'channel-key-3371510a-39ca-4bd7-b9b9-8673776e3492'; // KG이니시스 (신용카드)
+        const PORTONE_CHANNEL_KEY_KAKAO = 'channel-key-6150fd9c-1fa9-4c8c-8566-93c285b53057'; // 카카오페이 (QR/간편결제)
 
         // Auth gate
         const session = getSession();
@@ -905,9 +909,12 @@
             okEl.classList.add('show');
         });
 
-        // 카드 등록 (포트원 빌링키 발급)
-        document.getElementById('registerCardBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('registerCardBtn');
+        // 정기결제 수단 등록 (포트원 빌링키 발급) — 신용카드(이니시스) / 카카오페이(QR) 공용 처리
+        async function registerBillingKey(method) {
+            const btn = method === 'kakao'
+                ? document.getElementById('registerKakaoBtn')
+                : document.getElementById('registerCardBtn');
+            const originalLabel = btn.textContent;
             const errEl = document.getElementById('billingError');
             const okEl = document.getElementById('billingSuccess');
             errEl.classList.remove('show');
@@ -917,7 +924,7 @@
             const phone = document.getElementById('billingPhone').value.trim();
             const email = document.getElementById('billingEmail').value.trim();
             if (!phone || !email) {
-                errEl.textContent = '카드 등록을 위해 연락처와 이메일을 입력해주세요.';
+                errEl.textContent = '등록을 위해 연락처와 이메일을 입력해주세요.';
                 errEl.classList.add('show');
                 return;
             }
@@ -930,10 +937,10 @@
             try {
                 const issueResponse = await PortOne.requestIssueBillingKey({
                     storeId: PORTONE_STORE_ID,
-                    channelKey: PORTONE_CHANNEL_KEY,
-                    billingKeyMethod: 'CARD',
+                    channelKey: method === 'kakao' ? PORTONE_CHANNEL_KEY_KAKAO : PORTONE_CHANNEL_KEY_CARD,
+                    billingKeyMethod: method === 'kakao' ? 'EASY_PAY' : 'CARD',
                     issueId: 'issue-' + session.loginId + '-' + Date.now(),
-                    issueName: (session.storeName || session.displayName) + ' 정기결제 카드등록',
+                    issueName: (session.storeName || session.displayName) + ' 정기결제 등록',
                     customer: {
                         customerId: session.loginId,
                         fullName: session.displayName,
@@ -943,17 +950,18 @@
                 });
 
                 if (issueResponse.code !== undefined) {
-                    errEl.textContent = issueResponse.message || '카드 등록에 실패했습니다.';
+                    errEl.textContent = issueResponse.message || '등록에 실패했습니다.';
                     errEl.classList.add('show');
                 } else {
                     // TODO(2단계): billingKey를 서버(Cloudflare Workers)로 전송해 저장하고,
                     // 이후 매월 정기결제 API 호출에 사용해야 합니다. 지금은 심사/테스트 목적의 임시 저장입니다.
                     localStorage.setItem('ephseed_billingkey_' + session.loginId, issueResponse.billingKey);
-                    document.getElementById('billingKeyStatus').textContent = '등록 완료';
-                    okEl.textContent = '카드가 정상적으로 등록되었습니다.';
+                    document.getElementById('billingKeyStatus').textContent =
+                        '등록 완료 (' + (method === 'kakao' ? '카카오페이' : '신용카드') + ')';
+                    okEl.textContent = (method === 'kakao' ? '카카오페이가' : '카드가') + ' 정상적으로 등록되었습니다.';
                     okEl.classList.add('show');
 
-                    sendToTelegram(`💳 <b>[에브라임 시드] 정기결제 카드 등록</b>\n- 가입자 ID: ${session.userId}\n- 로그인 ID: ${session.loginId}\n- 플랜: ${planNames[session.plan] || session.plan}`);
+                    sendToTelegram(`💳 <b>[에브라임 시드] 정기결제 수단 등록</b>\n- 가입자 ID: ${session.userId}\n- 로그인 ID: ${session.loginId}\n- 플랜: ${planNames[session.plan] || session.plan}\n- 수단: ${method === 'kakao' ? '카카오페이' : '신용카드'}`);
                 }
             } catch (e) {
                 errEl.textContent = '오류가 발생했습니다: ' + e.message;
@@ -961,8 +969,11 @@
             }
 
             btn.disabled = false;
-            btn.textContent = '카드 등록하기';
-        });
+            btn.textContent = originalLabel;
+        }
+
+        document.getElementById('registerCardBtn').addEventListener('click', () => registerBillingKey('card'));
+        document.getElementById('registerKakaoBtn').addEventListener('click', () => registerBillingKey('kakao'));
 
         // Nav tabs
         document.querySelectorAll('.nav-item').forEach(item => {
