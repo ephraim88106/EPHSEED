@@ -630,6 +630,17 @@
                         <span class="info-val" id="billingKeyStatus">미등록</span>
                     </div>
                 </div>
+                <div class="info-card" style="max-width:480px;">
+                    <h2>카드 등록을 위한 연락처</h2>
+                    <div class="info-row">
+                        <span class="info-key">연락처</span>
+                        <input class="info-edit-input" id="billingPhone" type="text" placeholder="010-0000-0000">
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">이메일</span>
+                        <input class="info-edit-input" id="billingEmail" type="text" placeholder="example@email.com">
+                    </div>
+                </div>
                 <div style="max-width:480px; margin-top:1.25rem;">
                     <div class="pw-alert error" id="billingError"></div>
                     <div class="pw-alert success" id="billingSuccess"></div>
@@ -734,7 +745,7 @@
 
         // 포트원(PortOne) 결제 연동 정보 — storeId/channelKey는 공개 식별자로 클라이언트에 포함되어도 안전합니다.
         const PORTONE_STORE_ID = 'store-f5e552be-5741-4371-b879-753267102c61';
-        const PORTONE_CHANNEL_KEY = 'channel-key-6150fd9c-1fa9-4c8c-8566-93c285b53057';
+        const PORTONE_CHANNEL_KEY = 'channel-key-3371510a-39ca-4bd7-b9b9-8673776e3492';
 
         // Auth gate
         const session = getSession();
@@ -772,6 +783,8 @@
             if (localStorage.getItem('ephseed_billingkey_' + session.loginId)) {
                 document.getElementById('billingKeyStatus').textContent = '등록 완료';
             }
+            document.getElementById('billingPhone').value = localStorage.getItem('ephseed_phone_' + session.loginId) || '';
+            document.getElementById('billingEmail').value = localStorage.getItem('ephseed_email_' + session.loginId) || '';
 
             // 상황판 버튼: 관리자가 명시적으로 OFF하지 않으면 항상 표시
             if (localStorage.getItem('ephseed_dashboard_' + session.loginId) !== 'off') {
@@ -899,20 +912,33 @@
             const okEl = document.getElementById('billingSuccess');
             errEl.classList.remove('show');
             okEl.classList.remove('show');
+
+            const session = getSession();
+            const phone = document.getElementById('billingPhone').value.trim();
+            const email = document.getElementById('billingEmail').value.trim();
+            if (!phone || !email) {
+                errEl.textContent = '카드 등록을 위해 연락처와 이메일을 입력해주세요.';
+                errEl.classList.add('show');
+                return;
+            }
+            localStorage.setItem('ephseed_phone_' + session.loginId, phone);
+            localStorage.setItem('ephseed_email_' + session.loginId, email);
+
             btn.disabled = true;
             btn.textContent = '결제창 여는 중...';
 
-            const session = getSession();
             try {
                 const issueResponse = await PortOne.requestIssueBillingKey({
                     storeId: PORTONE_STORE_ID,
                     channelKey: PORTONE_CHANNEL_KEY,
-                    billingKeyMethod: 'EASY_PAY',
+                    billingKeyMethod: 'CARD',
                     issueId: 'issue-' + session.loginId + '-' + Date.now(),
                     issueName: (session.storeName || session.displayName) + ' 정기결제 카드등록',
                     customer: {
                         customerId: session.loginId,
                         fullName: session.displayName,
+                        phoneNumber: phone,
+                        email: email,
                     },
                 });
 
