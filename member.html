@@ -907,7 +907,7 @@
                 const issueResponse = await PortOne.requestIssueBillingKey({
                     storeId: PORTONE_STORE_ID,
                     channelKey: PORTONE_CHANNEL_KEY,
-                    billingKeyMethod: 'CARD',
+                    billingKeyMethod: 'EASY_PAY',
                     issueId: 'issue-' + session.loginId + '-' + Date.now(),
                     issueName: (session.storeName || session.displayName) + ' 정기결제 카드등록',
                     customer: {
