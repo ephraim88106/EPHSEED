@@ -211,6 +211,8 @@ class EphseedPricing extends HTMLElement {
         const description = this.getAttribute('description');
         const recommended = this.getAttribute('recommended') === 'true';
         const features = JSON.parse(this.getAttribute('features') || '[]');
+        const planKeyMap = { '실속형': 'basic', '표준형': 'standard', '프리미엄': 'premium' };
+        const planKey = planKeyMap[plan] || 'consult';
 
         this.shadowRoot.innerHTML = `
         <style>
@@ -298,8 +300,12 @@ class EphseedPricing extends HTMLElement {
                 color: oklch(15% 0.05 250);
                 padding: 1rem;
                 border-radius: 12px;
+                border: none;
                 text-decoration: none;
                 font-weight: 700;
+                font-family: inherit;
+                font-size: 1rem;
+                cursor: pointer;
                 transition: all 0.3s ease;
             }
             .pricing-card.recommended .btn {
@@ -315,6 +321,89 @@ class EphseedPricing extends HTMLElement {
                     transform: scale(1);
                 }
             }
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(10, 10, 20, 0.55);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+                padding: 1.5rem;
+            }
+            .modal-overlay.open { display: flex; }
+            .modal-box {
+                background: white;
+                border-radius: 24px;
+                max-width: 420px;
+                width: 100%;
+                padding: 2.5rem;
+                box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+                position: relative;
+            }
+            .modal-close {
+                position: absolute;
+                top: 1.25rem;
+                right: 1.5rem;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                line-height: 1;
+                color: oklch(55% 0.02 250);
+                cursor: pointer;
+            }
+            .modal-close:hover { color: oklch(15% 0.05 250); }
+            .modal-box h3 {
+                font-size: 1.4rem;
+                margin-bottom: 0.25rem;
+                color: oklch(15% 0.05 250);
+            }
+            .modal-price {
+                font-size: 1.75rem;
+                font-weight: 800;
+                margin: 0.75rem 0 1.25rem;
+                color: oklch(15% 0.05 250);
+            }
+            .modal-price span {
+                font-size: 0.95rem;
+                font-weight: 500;
+                color: oklch(45% 0.02 250);
+            }
+            .modal-box ul {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 2rem 0;
+            }
+            .modal-box li {
+                padding: 0.6rem 0;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                color: oklch(20% 0.02 250);
+                font-size: 0.95rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .modal-box li::before {
+                content: "✓";
+                color: oklch(60% 0.2 250);
+                font-weight: 900;
+            }
+            .modal-join-btn {
+                display: block;
+                width: 100%;
+                text-align: center;
+                background: oklch(60% 0.2 250);
+                color: white;
+                padding: 1rem;
+                border-radius: 12px;
+                text-decoration: none;
+                font-weight: 700;
+                transition: all 0.3s ease;
+                box-sizing: border-box;
+            }
+            .modal-join-btn:hover {
+                background: oklch(20% 0.02 250);
+            }
         </style>
         <div class="pricing-card ${recommended ? 'recommended' : ''}">
             ${recommended ? '<div class="badge">추천 플랜</div>' : ''}
@@ -325,9 +414,32 @@ class EphseedPricing extends HTMLElement {
             <ul>
                 ${features.map(f => `<li>${f}</li>`).join('')}
             </ul>
-            <a href="contact.html" class="btn">시작하기</a>
+            <button type="button" class="btn start-btn">시작하기</button>
+        </div>
+        <div class="modal-overlay">
+            <div class="modal-box">
+                <button type="button" class="modal-close" aria-label="닫기">&times;</button>
+                <span class="badge" style="position:static; display:inline-block; transform:none; margin-bottom:0.75rem;">${plan} 플랜</span>
+                <h3>${description}</h3>
+                <div class="modal-price">월 ${price}<span>원 (부가세 별도)</span></div>
+                <ul>
+                    ${features.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+                <a href="contact.html?plan=${planKey}" class="modal-join-btn">가입하기</a>
+            </div>
         </div>
         `;
+
+        const overlay = this.shadowRoot.querySelector('.modal-overlay');
+        this.shadowRoot.querySelector('.start-btn').addEventListener('click', () => {
+            overlay.classList.add('open');
+        });
+        this.shadowRoot.querySelector('.modal-close').addEventListener('click', () => {
+            overlay.classList.remove('open');
+        });
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('open');
+        });
     }
 }
 customElements.define('e-pricing', EphseedPricing);
@@ -496,6 +608,13 @@ async function sendTelegramNotification(data) {
 // Contact Form Handler
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
+    // 요금제 카드에서 "가입하기"로 넘어온 경우 해당 플랜을 미리 선택
+    const requestedPlan = new URLSearchParams(window.location.search).get('plan');
+    const planSelect = document.getElementById('plan');
+    if (requestedPlan && planSelect && planSelect.querySelector(`option[value="${requestedPlan}"]`)) {
+        planSelect.value = requestedPlan;
+    }
+
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(contactForm);
