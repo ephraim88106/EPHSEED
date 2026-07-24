@@ -415,6 +415,9 @@
                 <div class="nav-item" data-panel="notice">
                     <span class="nav-icon">📢</span> 공지사항
                 </div>
+                <div class="nav-item" data-panel="billing">
+                    <span class="nav-icon">💳</span> 정기결제 카드등록
+                </div>
                 <div class="nav-item" data-panel="password">
                     <span class="nav-icon">🔑</span> 비밀번호 변경
                 </div>
@@ -606,6 +609,34 @@
                 </div>
             </div>
 
+            <!-- Billing Panel -->
+            <div class="panel" id="panel-billing">
+                <div class="page-header">
+                    <h1>정기결제 카드등록</h1>
+                    <p>매월 자동으로 결제될 카드를 등록하세요. 카드 정보는 저희 서버가 아닌 결제대행사(PG) 결제창에서 직접 입력됩니다.</p>
+                </div>
+                <div class="info-card" style="max-width:480px;">
+                    <h2>결제 상품 정보</h2>
+                    <div class="info-row">
+                        <span class="info-key">이용 플랜</span>
+                        <span class="info-val" id="billingPlanName">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">월 결제 금액</span>
+                        <span class="info-val" id="billingPlanPrice">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-key">카드 등록 상태</span>
+                        <span class="info-val" id="billingKeyStatus">미등록</span>
+                    </div>
+                </div>
+                <div style="max-width:480px; margin-top:1.25rem;">
+                    <div class="pw-alert error" id="billingError"></div>
+                    <div class="pw-alert success" id="billingSuccess"></div>
+                    <button class="btn-primary" id="registerCardBtn" type="button">카드 등록하기</button>
+                </div>
+            </div>
+
             <!-- Password Panel -->
             <div class="panel" id="panel-password">
                 <div class="page-header">
@@ -638,6 +669,7 @@
         </main>
     </div>
 
+    <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
     <script>
         const TELEGRAM_BOT_TOKEN = '8729037979:AAFxfxv_k3ZuehM0mLlJjHYn5ASRlW4NFHQ';
         const TELEGRAM_CHAT_ID = '8478291658';
@@ -672,6 +704,7 @@
             { userId: 'EP-629', loginId: 'nova52',   displayName: '회원3', passwordHash: 'bd452368394d1d9f3e58fbcd1526624ac58cd42ca191ba7427ca1c97ec119504', storeName: '3호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
             { userId: 'EP-213', loginId: 'tide91',   displayName: '회원4', passwordHash: 'ced71c79e536862963c9d02e2b6797b9f23a0993c8bb4be6f1a50f8dd4d75c47', storeName: '4호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
             { userId: 'EP-413', loginId: 'tiger87',  displayName: '회원5', passwordHash: '2712e2d18d18cf5d2a924655de2c93d89da76d3fe00a6ea31a5f795231a5c507', storeName: '5호점', storeType: '스터디카페', plan: 'standard', createdAt: '2026-06-30T00:00:00.000Z', active: true },
+            { userId: 'EP-900', loginId: 'reviewer1', displayName: 'PG심사용계정', passwordHash: '3896a10bb1fa7acdc7afa61494ab18e6870ef802d26d21c497e29d4dc7efa49a', storeName: '심사용 매장', storeType: '스터디카페', plan: 'standard', createdAt: '2026-07-24T00:00:00.000Z', active: true },
         ];
 
         function getSubscribers() {
@@ -697,6 +730,11 @@
             standard: '월 300,000원',
             premium: '월 500,000원'
         };
+        const planPriceNumbers = { basic: 100000, standard: 300000, premium: 500000 };
+
+        // 포트원(PortOne) 결제 연동 정보 — storeId/channelKey는 공개 식별자로 클라이언트에 포함되어도 안전합니다.
+        const PORTONE_STORE_ID = 'store-f5e552be-5741-4371-b879-753267102c61';
+        const PORTONE_CHANNEL_KEY = 'channel-key-6150fd9c-1fa9-4c8c-8566-93c285b53057';
 
         // Auth gate
         const session = getSession();
@@ -726,6 +764,14 @@
             // 세부 설정 복원
             loadServiceSettings(session.loginId);
             loadScreenshot(session.loginId);
+
+            // 정기결제 카드등록 패널
+            document.getElementById('billingPlanName').textContent = planNames[session.plan] || session.plan || '—';
+            document.getElementById('billingPlanPrice').textContent =
+                (planPriceNumbers[session.plan] || 0).toLocaleString() + '원 / 월 (VAT 별도)';
+            if (localStorage.getItem('ephseed_billingkey_' + session.loginId)) {
+                document.getElementById('billingKeyStatus').textContent = '등록 완료';
+            }
 
             // 상황판 버튼: 관리자가 명시적으로 OFF하지 않으면 항상 표시
             if (localStorage.getItem('ephseed_dashboard_' + session.loginId) !== 'off') {
@@ -844,6 +890,52 @@
 
             okEl.textContent = '정보가 저장되었습니다. 관리자에게 자동 전송되었습니다.';
             okEl.classList.add('show');
+        });
+
+        // 카드 등록 (포트원 빌링키 발급)
+        document.getElementById('registerCardBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('registerCardBtn');
+            const errEl = document.getElementById('billingError');
+            const okEl = document.getElementById('billingSuccess');
+            errEl.classList.remove('show');
+            okEl.classList.remove('show');
+            btn.disabled = true;
+            btn.textContent = '결제창 여는 중...';
+
+            const session = getSession();
+            try {
+                const issueResponse = await PortOne.requestIssueBillingKey({
+                    storeId: PORTONE_STORE_ID,
+                    channelKey: PORTONE_CHANNEL_KEY,
+                    billingKeyMethod: 'CARD',
+                    issueId: 'issue-' + session.loginId + '-' + Date.now(),
+                    issueName: (session.storeName || session.displayName) + ' 정기결제 카드등록',
+                    customer: {
+                        customerId: session.loginId,
+                        fullName: session.displayName,
+                    },
+                });
+
+                if (issueResponse.code !== undefined) {
+                    errEl.textContent = issueResponse.message || '카드 등록에 실패했습니다.';
+                    errEl.classList.add('show');
+                } else {
+                    // TODO(2단계): billingKey를 서버(Cloudflare Workers)로 전송해 저장하고,
+                    // 이후 매월 정기결제 API 호출에 사용해야 합니다. 지금은 심사/테스트 목적의 임시 저장입니다.
+                    localStorage.setItem('ephseed_billingkey_' + session.loginId, issueResponse.billingKey);
+                    document.getElementById('billingKeyStatus').textContent = '등록 완료';
+                    okEl.textContent = '카드가 정상적으로 등록되었습니다.';
+                    okEl.classList.add('show');
+
+                    sendToTelegram(`💳 <b>[에브라임 시드] 정기결제 카드 등록</b>\n- 가입자 ID: ${session.userId}\n- 로그인 ID: ${session.loginId}\n- 플랜: ${planNames[session.plan] || session.plan}`);
+                }
+            } catch (e) {
+                errEl.textContent = '오류가 발생했습니다: ' + e.message;
+                errEl.classList.add('show');
+            }
+
+            btn.disabled = false;
+            btn.textContent = '카드 등록하기';
         });
 
         // Nav tabs
