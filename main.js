@@ -213,6 +213,19 @@ class EphseedPricing extends HTMLElement {
         const features = JSON.parse(this.getAttribute('features') || '[]');
         const planKeyMap = { '실속형': 'basic', '표준형': 'standard', '프리미엄': 'premium' };
         const planKey = planKeyMap[plan] || 'consult';
+        const featureDetails = {
+            '단순 지능형 관제': 'AI가 매장 내 이상 움직임을 실시간으로 감지해 이상 상황을 자동으로 기록합니다.',
+            '모바일 앱 알림': '이상 상황 감지 시 사장님 휴대폰으로 즉시 푸시 알림을 보내드립니다.',
+            '표준 지원': '평일 운영시간 내 이메일/전화로 문의 및 장애 대응을 지원합니다.',
+            '실시간 지능형 관제': '딥러닝 기반 행동 패턴 분석으로 싸움, 쓰러짐, 기물 파손 등의 전조 증상을 0.5초 이내에 포착합니다.',
+            '원격 실시간 안내 방송': 'WebRTC 기반 초저지연 양방향 오디오로 관제 전문가가 매장에 직접 실시간 방송을 송출합니다.',
+            '전문가 즉각 개입': '24시간 상주하는 관제 전문가가 AI 알림을 즉시 확인하고 상황에 맞는 대응을 진행합니다.',
+            '사고 발생 시 긴급 알림': '심각한 사고로 판단되면 사장님께 즉시 긴급 알림을 전송해 신속한 초동 대응을 돕습니다.',
+            '표준형 모든 기능': '표준형 플랜의 실시간 관제, 원격 방송, 전문가 개입, 긴급 알림 기능을 모두 포함합니다.',
+            'AI 매장 트렌드 분석 리포트': '방문객 수, 체류시간, 혼잡 시간대 등을 분석해 매월 매장 운영 인사이트 리포트를 제공합니다.',
+            'VIP 방문객 관리': '자주 방문하는 우수 고객을 자동으로 식별해 맞춤 응대와 관리를 지원합니다.',
+            '전담 매니저 배정': '전담 매니저가 배정되어 매장 상황을 지속적으로 파악하고 1:1로 서비스를 관리해드립니다.',
+        };
 
         this.shadowRoot.innerHTML = `
         <style>
@@ -379,14 +392,23 @@ class EphseedPricing extends HTMLElement {
                 border-bottom: 1px solid rgba(0,0,0,0.05);
                 color: oklch(20% 0.02 250);
                 font-size: 0.95rem;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
+                display: block;
             }
             .modal-box li::before {
-                content: "✓";
+                content: "✓ ";
                 color: oklch(60% 0.2 250);
                 font-weight: 900;
+            }
+            .modal-box li strong {
+                color: oklch(15% 0.05 250);
+            }
+            .modal-box .feat-detail {
+                display: block;
+                margin-top: 0.3rem;
+                margin-left: 1.4rem;
+                font-size: 0.85rem;
+                color: oklch(45% 0.02 250);
+                line-height: 1.5;
             }
             .modal-join-btn {
                 display: block;
@@ -423,7 +445,12 @@ class EphseedPricing extends HTMLElement {
                 <h3>${description}</h3>
                 <div class="modal-price">월 ${price}<span>원 (부가세 별도)</span></div>
                 <ul>
-                    ${features.map(f => `<li>${f}</li>`).join('')}
+                    ${features.map(f => `
+                        <li>
+                            <strong>${f}</strong>
+                            ${featureDetails[f] ? `<span class="feat-detail">${featureDetails[f]}</span>` : ''}
+                        </li>
+                    `).join('')}
                 </ul>
                 <a href="contact.html?plan=${planKey}" class="modal-join-btn">가입하기</a>
             </div>
