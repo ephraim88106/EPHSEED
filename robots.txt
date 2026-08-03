@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /member.html
+Disallow: /subscribers.json
+
+# 네이버
+User-agent: Yeti
+Allow: /
+
+# 다음(카카오)
+User-agent: Daum
+Allow: /
+
+# 구글
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://ephseed.com/sitemap.xml
