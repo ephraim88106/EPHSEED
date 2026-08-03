@@ -28,7 +28,7 @@ seo_fix.py — ephseed.com SEO 정비 (재실행 안전 · 멱등)
   애드센스 정책상 문제가 될 수 있다. noindex 처리한다.
 """
 
-import os, re, glob, html, datetime
+import os, re, glob, html, hashlib, datetime
 
 ROOT       = os.path.dirname(os.path.abspath(__file__))
 SITE       = "https://ephseed.com"
@@ -63,6 +63,19 @@ def has_ads(fname):
     if fname in NOINDEX:
         return False
     return fname in ADS_PAGES or fname.startswith(ADS_PAGES_PREFIX)
+
+def asset_version(fname):
+    """파일 내용 해시 앞 8자리. CSS 를 고쳤는데 재방문자에게 옛 파일이 계속
+    보이는 문제(브라우저 캐시)를 막는다. 내용이 바뀔 때만 값이 바뀌므로
+    불필요한 재다운로드도 생기지 않는다."""
+    path = os.path.join(ROOT, fname)
+    if not os.path.exists(path):
+        return ""
+    with open(path, "rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:8]
+
+
+CSS_VER = asset_version("style.css")
 
 BEGIN = "<!-- SEO:BEGIN -->"
 END   = "<!-- SEO:END -->"
@@ -150,6 +163,11 @@ def fix_file(path):
     # 죽은 도메인 교정 — ephseed.ai 는 DNS 에 존재하지 않는다 (NXDOMAIN)
     src = src.replace("https://ephseed.ai", SITE).replace("http://ephseed.ai", SITE)
 
+    # style.css 캐시 무효화 — 버전 쿼리를 현재 파일 해시로 맞춘다
+    if CSS_VER:
+        src = re.sub(r'(href=["\'])style\.css(\?v=[0-9a-f]+)?(["\'])',
+                     r'\g<1>style.css?v=%s\g<3>' % CSS_VER, src)
+
     # 이전 실행 블록 제거
     src = re.sub(r"[ \t]*\n?" + re.escape(BEGIN) + r".*?" + re.escape(END) + r"[ \t]*\n?",
                  "", src, flags=re.S)
@@ -230,3 +248,4 @@ if __name__ == "__main__":
     print("  → 회사 소개·제품 페이지에는 광고를 넣지 않는다 (고객 전환 우선)")
     print("sitemap.xml: %d개 URL (%s)" % (n, SITE))
     print("robots.txt: 갱신 완료")
+    print("style.css 버전: ?v=%s" % (CSS_VER or "(파일 없음)"))
