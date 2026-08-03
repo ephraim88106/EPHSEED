@@ -10,56 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .tip-box {
-            background: var(--primary-light);
-            padding: 2rem;
-            border-radius: 16px;
-            border-left: 6px solid var(--primary);
-            margin: 2rem 0;
-        }
-        .tip-box h4 { margin: 0 0 0.75rem; }
-        .tip-box p:last-child { margin-bottom: 0; }
-        .warn-box {
-            background: #fff4f4;
-            padding: 2rem;
-            border-radius: 16px;
-            border-left: 6px solid #d03b3b;
-            margin: 2rem 0;
-        }
-        .warn-box h4 { margin: 0 0 0.75rem; color: #b02a2a; }
-        .warn-box p:last-child { margin-bottom: 0; }
-        .post-content table {
-            width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.95rem;
-        }
-        .post-content th, .post-content td {
-            text-align: left; padding: 0.85rem 1rem; border-bottom: 1px solid #e5e5e5;
-        }
-        .post-content th {
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
-            color: var(--text-muted); border-bottom: 2px solid var(--text-muted);
-        }
-        .post-content td.num { text-align: right; white-space: nowrap; }
-        .steps { counter-reset: step; list-style: none; padding-left: 0; }
-        .steps > li {
-            counter-increment: step; position: relative;
-            padding-left: 3.2rem; margin-bottom: 1.75rem;
-        }
-        .steps > li::before {
-            content: counter(step);
-            position: absolute; left: 0; top: 0;
-            width: 2.2rem; height: 2.2rem; border-radius: 50%;
-            background: var(--primary); color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 0.95rem;
-        }
-        .sources { font-size: 0.85rem; color: var(--text-muted); line-height: 1.9; }
-        .sources a { color: var(--text-muted); }
-        .disclaimer {
-            font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;
-            border-top: 1px solid #e5e5e5; padding-top: 1.5rem; margin-top: 3rem;
-        }
-    </style>
 <!-- SEO:BEGIN -->
 <link rel="canonical" href="https://ephseed.com/post-theft-response">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -85,7 +35,8 @@
     <header class="post-header">
         <div class="container">
             <span class="badge">SECURITY GUIDE</span>
-            <h1 style="font-size: 2.5rem; margin-top: 1rem;">무인매장 도난, 신고부터 배상까지<br>점주가 해야 할 것과 절대 하면 안 되는 것</h1>
+            <h1>무인매장 도난, 신고부터 배상까지<br>점주가 해야 할 것과 절대 하면 안 되는 것</h1>
+            <p class="post-meta"><span>SECURITY GUIDE</span><span>2026년 8월 3일</span><span>읽는 데 약 7분</span></p>
         </div>
     </header>
 
@@ -333,7 +284,7 @@
                     경찰이 수사에서 가장 아쉬워하는 부분도 매장 밖 동선입니다.
                     범인이 어느 방향으로 갔는지, 차량을 탔는지가 검거를 가릅니다.
                 </p>
-                <p style="margin-top:1rem;">
+                <p>
                     <strong>CCTV 안내판은 붙어 있으신가요?</strong>
                     개인정보보호법 제25조 제4항은 정보주체가 쉽게 인식할 수 있도록 안내판 설치 등 필요한 조치를 하도록 정하고 있습니다.
                     도난 대응 이전에 점주 본인을 지키는 최소 요건입니다.
@@ -346,9 +297,9 @@
                 위에서 정리한 사후 절차를 아예 밟지 않는 것이 가장 싸게 먹히기 때문입니다.
             </p>
 
-            <div style="margin-top: 4rem; text-align: center;">
+            <div class="post-actions">
                 <a href="blog.html" class="btn btn-secondary">다른 글 보기</a>
-                <a href="contact.html" class="btn btn-primary" style="margin-left: 1rem;">우리 매장 상담받기</a>
+                <a href="contact.html" class="btn btn-primary">우리 매장 상담받기</a>
             </div>
 
             <div class="disclaimer">
@@ -359,7 +310,7 @@
                     금액이 크거나 분쟁이 예상되는 경우 변호사와 상담하시기 바랍니다.
                     법령과 판례는 개정·변경될 수 있습니다.
                 </p>
-                <p class="sources" style="margin-top:1.5rem;">
+                <p class="sources">
                     <strong>참고 자료</strong><br>
                     · 경찰청 무인점포 절도 발생 현황 (권칠승 의원실 제출 자료, 2026)<br>
                     · 한국형사·법무정책연구원, 「무인점포 범죄 실태와 대응방안」(2022)<br>
