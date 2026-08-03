@@ -45,6 +45,25 @@ NAVER_VERIFY = ""
 # 색인 대상이 아닌 페이지 — sitemap 제외 + noindex + 광고 없음
 NOINDEX = {"admin.html", "login.html", "member.html", "404.html"}
 
+# 애드센스를 넣을 페이지 (2026-08-03 결정)
+#
+# 회사 홈페이지와 애드센스는 목적이 충돌한다.
+#   · 회사 홈페이지: 방문자를 고객으로 전환시키는 게 목적
+#   · 애드센스: 방문자를 광고로 내보내는 게 목적
+# 무인매장 관제 계약 하나의 가치가 광고 클릭 몇백 원과 비교가 안 되고,
+# B2B 사이트에 배너가 붙으면 신뢰도도 떨어진다.
+#
+# 그래서 정보를 찾으러 온 사람(블로그 글)에게만 광고를 보이고,
+# 제품을 보러 온 사람(메인·제품·기능·문의)에게는 보이지 않게 한다.
+ADS_PAGES_PREFIX = ("post-",)
+ADS_PAGES = {"blog.html"}
+
+
+def has_ads(fname):
+    if fname in NOINDEX:
+        return False
+    return fname in ADS_PAGES or fname.startswith(ADS_PAGES_PREFIX)
+
 BEGIN = "<!-- SEO:BEGIN -->"
 END   = "<!-- SEO:END -->"
 
@@ -100,6 +119,8 @@ def build_block(fname, src):
         parts.append('<meta name="robots" content="noindex, follow">')
     else:
         parts.append('<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">')
+
+    if has_ads(fname):
         parts.append(ADSENSE_BLOCK)
 
     title = get_title(src)
@@ -204,6 +225,8 @@ if __name__ == "__main__":
     write_robots()
 
     print("메타 주입: %s" % ", ".join("%s %d개" % (k, v) for k, v in stats.items()))
-    print("애드센스 적용: %d개 (제외 %d개 — 로그인·대시보드·에러)" % (len(indexable), len(NOINDEX)))
+    ads = [f for f in files if has_ads(f)]
+    print("애드센스 적용: %d개 (%s)" % (len(ads), ", ".join(ads) if ads else "없음"))
+    print("  → 회사 소개·제품 페이지에는 광고를 넣지 않는다 (고객 전환 우선)")
     print("sitemap.xml: %d개 URL (%s)" % (n, SITE))
     print("robots.txt: 갱신 완료")

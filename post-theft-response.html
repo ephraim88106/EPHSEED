@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>무인매장 도난, 신고부터 배상까지 — 점주가 해야 할 것과 절대 하면 안 되는 것 | 에브라임 시드</title>
+    <meta name="description" content="무인점포 절도는 5년 만에 3배 늘었지만 피해액의 78%는 10만원 이하입니다. CCTV 사진을 붙이면 왜 점주가 처벌받는지, 경찰 신고는 어떻게 하는지, 합의금은 얼마가 적정한지 실무 순서대로 정리했습니다.">
+    <meta name="keywords" content="무인매장 도난, 무인점포 절도, 무인매장 도난 신고, 무인점포 절도 합의금, CCTV 공개 처벌, 촉법소년 절도 배상, 무인점포 절도 대처">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tip-box {
+            background: var(--primary-light);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 6px solid var(--primary);
+            margin: 2rem 0;
+        }
+        .tip-box h4 { margin: 0 0 0.75rem; }
+        .tip-box p:last-child { margin-bottom: 0; }
+        .warn-box {
+            background: #fff4f4;
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 6px solid #d03b3b;
+            margin: 2rem 0;
+        }
+        .warn-box h4 { margin: 0 0 0.75rem; color: #b02a2a; }
+        .warn-box p:last-child { margin-bottom: 0; }
+        .post-content table {
+            width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.95rem;
+        }
+        .post-content th, .post-content td {
+            text-align: left; padding: 0.85rem 1rem; border-bottom: 1px solid #e5e5e5;
+        }
+        .post-content th {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--text-muted); border-bottom: 2px solid var(--text-muted);
+        }
+        .post-content td.num { text-align: right; white-space: nowrap; }
+        .steps { counter-reset: step; list-style: none; padding-left: 0; }
+        .steps > li {
+            counter-increment: step; position: relative;
+            padding-left: 3.2rem; margin-bottom: 1.75rem;
+        }
+        .steps > li::before {
+            content: counter(step);
+            position: absolute; left: 0; top: 0;
+            width: 2.2rem; height: 2.2rem; border-radius: 50%;
+            background: var(--primary); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.95rem;
+        }
+        .sources { font-size: 0.85rem; color: var(--text-muted); line-height: 1.9; }
+        .sources a { color: var(--text-muted); }
+        .disclaimer {
+            font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;
+            border-top: 1px solid #e5e5e5; padding-top: 1.5rem; margin-top: 3rem;
+        }
+    </style>
+<!-- SEO:BEGIN -->
+<link rel="canonical" href="https://ephseed.com/post-theft-response">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="google-adsense-account" content="ca-pub-9118774019383180">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9118774019383180"
+     crossorigin="anonymous"></script>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="에브라임 시드">
+<meta property="og:title" content="무인매장 도난, 신고부터 배상까지 — 점주가 해야 할 것과 절대 하면 안 되는 것 | 에브라임 시드">
+<meta property="og:description" content="무인점포 절도는 5년 만에 3배 늘었지만 피해액의 78%는 10만원 이하입니다. CCTV 사진을 붙이면 왜 점주가 처벌받는지, 경찰 신고는 어떻게 하는지, 합의금은 얼마가 적정한지 실무 순서대로 정리했습니다.">
+<meta property="og:url" content="https://ephseed.com/post-theft-response">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://ephseed.com/assets/og-default.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="무인매장 도난, 신고부터 배상까지 — 점주가 해야 할 것과 절대 하면 안 되는 것 | 에브라임 시드">
+<meta name="twitter:description" content="무인점포 절도는 5년 만에 3배 늘었지만 피해액의 78%는 10만원 이하입니다. CCTV 사진을 붙이면 왜 점주가 처벌받는지, 경찰 신고는 어떻게 하는지, 합의금은 얼마가 적정한지 실무 순서대로 정리했습니다.">
+<!-- SEO:END -->
+</head>
+<body>
+
+    <e-header></e-header>
+
+    <header class="post-header">
+        <div class="container">
+            <span class="badge">SECURITY GUIDE</span>
+            <h1 style="font-size: 2.5rem; margin-top: 1rem;">무인매장 도난, 신고부터 배상까지<br>점주가 해야 할 것과 절대 하면 안 되는 것</h1>
+        </div>
+    </header>
+
+    <article class="container">
+        <div class="post-content">
+
+            <p>
+                무인점포 절도 신고는 <strong>2021년 3,514건에서 2025년 11,015건으로 5년 만에 3배 이상</strong> 늘었습니다.
+                무인매장을 운영하신다면 도난은 "혹시"가 아니라 "언제"의 문제에 가깝습니다.
+            </p>
+
+            <p>
+                그런데 막상 일이 터지면 대부분의 점주가 <strong>가장 하고 싶은 일부터 합니다.</strong>
+                CCTV 화면을 캡처해서 매장 문에 붙이고, 동네 커뮤니티에 올리고, "100배 변상"이라고 써 붙입니다.
+                심정은 이해가 갑니다. 하지만 이 세 가지는 전부 <strong>점주 쪽이 위험해지는 행동</strong>입니다.
+            </p>
+
+            <p>
+                이 글은 무인매장에서 도난이 발생했을 때 <strong>실제로 무엇을 어떤 순서로 해야 하는지</strong>,
+                그리고 <strong>무엇을 절대 하면 안 되는지</strong>를 법적 근거와 함께 정리한 것입니다.
+            </p>
+
+            <h2>먼저 인정해야 할 사실: 돈은 거의 못 받습니다</h2>
+
+            <p>
+                기분 나쁜 이야기지만 이걸 먼저 받아들여야 판단이 서질 않습니다.
+                서울시 무인점포 범죄 실태를 분석한 한국형사·법무정책연구원 연구에 따르면,
+                <strong>피해 금액의 78.2%가 10만원 이하</strong>였고 100만원을 넘는 경우는 1%도 되지 않았습니다.
+            </p>
+
+            <p>
+                게다가 상대가 누구인지도 대체로 정해져 있습니다.
+                에스원 범죄예방연구소가 2019~2025년 무인매장 절도를 분석한 결과
+                <strong>10대가 46%, 20대가 31%로 1020세대가 77%</strong>를 차지했습니다.
+                서울시 조사에서는 10대 비율이 57.3%까지 올라갑니다.
+            </p>
+
+            <div class="tip-box">
+                <h4>💡 그래서 목표를 바꿔야 합니다</h4>
+                <p>
+                    5,000원짜리 아이스크림 값을 받아내는 것은 현실적인 목표가 아닙니다.
+                    <strong>진짜 목표는 "이 사람이 다시 오지 않게 하는 것", 그리고 "다음 사람이 시도하지 않게 하는 것"</strong>입니다.
+                    이 관점으로 보면 아래 절차가 왜 이런 순서인지 이해가 됩니다.
+                </p>
+            </div>
+
+            <h2>⛔ 절대 하면 안 되는 것 세 가지</h2>
+
+            <h3>① CCTV 사진을 붙이거나 올리는 것</h3>
+
+            <p>
+                가장 흔하고, 가장 위험합니다.
+                절도범 얼굴이 찍힌 CCTV 사진을 매장에 게시하거나 SNS·커뮤니티에 올리면
+                <strong>개인정보보호법 위반으로 점주가 5년 이하의 징역 또는 5천만원 이하의 벌금</strong> 대상이 됩니다.
+            </p>
+
+            <p>
+                개인정보보호위원회는 "범죄자라고 특정해 얼굴 등이 찍힌 CCTV 사진을 공개하는 것은 문제 소지가 있으며,
+                공개할 경우 비식별 처리가 필요하다"고 밝혔습니다.
+                <strong>눈만 가리는 모자이크로는 부족하고</strong>, 개인을 특정할 수 없는 수준이어야 합니다.
+            </p>
+
+            <p>
+                실제로 충남에서는 무인 아이스크림점 절도범으로 특정된 여중생의 CCTV 사진이 유포된 뒤
+                해당 학생이 극단적 선택을 한 사건이 있었습니다.
+                피해자였던 점주가 순식간에 가해자 자리에 서게 되는 상황입니다.
+            </p>
+
+            <div class="warn-box">
+                <h4>⚠️ "이 사람 맞냐"고 보여주기만 해도 위반입니다</h4>
+                <p>
+                    대법원은 2024년 8월 판결(2020도18397)에서
+                    CCTV 영상을 <strong>"시청하는 방식으로 정보를 지득함으로써 개인정보를 제공받은 자에 해당할 수 있다"</strong>고 판단했습니다.
+                    파일을 넘기지 않고 모니터를 보여주기만 해도 '제공'이 된다는 뜻입니다.
+                    옆 가게 사장님께 "혹시 이 학생 아세요?" 하고 화면을 돌려 보여주는 것도 여기에 해당할 수 있습니다.
+                </p>
+            </div>
+
+            <h3>② "100배 변상" 안내문</h3>
+
+            <p>
+                "아이스크림 훔쳐 갈 시 100배 변상", "초등학생 100만원 / 중학생 200만원 / 성인 300만원" 같은 경고문이 실제로 쓰이고 있습니다.
+                억제 효과를 노린 것이지만, <strong>실제로 그 금액을 청구하면 분쟁이 점주 쪽으로 돌아옵니다.</strong>
+            </p>
+
+            <p>
+                아이스크림 한 개를 가져간 초등학생의 부모에게 200~300만원을 요구한 사례가 사회 문제로 번졌고,
+                이런 일들이 쌓여 2026년 7월에는 무인점포 CCTV 설치 의무화를 담은 유통산업발전법 개정안이 발의되기도 했습니다(현재 발의 단계).
+            </p>
+
+            <p>
+                청구할 수 있는 것은 <strong>실제로 발생한 손해</strong>입니다.
+                물건값, 파손된 집기 수리비, 영상 확보와 신고에 들어간 실비 정도가 현실적인 범위입니다.
+            </p>
+
+            <h3>③ 직접 찾아가는 것</h3>
+
+            <p>
+                신원을 알아냈다고 해서 집이나 학교로 찾아가면,
+                받아내려던 돈보다 훨씬 큰 문제(주거침입, 협박, 명예훼손)로 번질 수 있습니다.
+                <strong>연락은 경찰을 거쳐서 하는 것이 원칙</strong>입니다.
+            </p>
+
+            <h2>✅ 실제로 해야 할 것 — 순서대로</h2>
+
+            <ol class="steps">
+                <li>
+                    <h3 style="margin-top:0;">영상을 "원본 파일"로 확보한다</h3>
+                    <p>
+                        가장 흔한 실수가 <strong>모니터를 휴대폰으로 찍는 것</strong>입니다.
+                        이렇게 재촬영한 영상은 증거로 쓸 수는 있지만,
+                        원본 제출이 불가능한 사유·촬영자 진술·조작이 없었다는 점을 따로 증명해야 해서 번거로워집니다.
+                    </p>
+                    <p>
+                        <strong>녹화기에서 원본 파일을 USB로 내보내십시오.</strong>
+                        범행 장면만이 아니라 <strong>입장부터 퇴장까지 전 구간</strong>을 함께 받는 것이 좋습니다.
+                        얼굴이 안 나와도 옷 색깔, 가방, 신발, 차량, 동행자, 이동 방향이 수사에 쓰입니다.
+                    </p>
+                </li>
+                <li>
+                    <h3 style="margin-top:0;">경찰에 신고하고 영상을 제출한다</h3>
+                    <p>
+                        여기서 많은 분들이 망설입니다. "내 CCTV를 남한테 주면 개인정보법 위반 아닌가?"
+                    </p>
+                    <p>
+                        <strong>수사기관에 제출하는 것은 괜찮습니다.</strong>
+                        대법원은 2025년 판결들(2025도9522 등)에서
+                        "범죄혐의의 소명이나 방어권 행사를 위해 수사기관에 제출하는 경우
+                        사회상규에 위배되지 않는 행위에 해당해 위법성이 조각될 수 있다"고 정리했습니다.
+                    </p>
+                    <p>
+                        다만 <strong>수사기관 제출에 한정</strong>됩니다. 같은 영상이라도 SNS에 올리거나 손님에게 보여주면 앞의 ①번 문제로 돌아갑니다.
+                        그리고 <strong>필요한 최소한만</strong> 제출하는 것이 안전합니다.
+                    </p>
+                </li>
+                <li>
+                    <h3 style="margin-top:0;">합의는 "처벌 수위를 정하는 절차"라고 이해한다</h3>
+                    <p>
+                        절도죄는 <strong>반의사불벌죄가 아닙니다.</strong>
+                        점주가 처벌을 원하지 않는다고 해서 사건이 자동으로 종결되지 않습니다.
+                    </p>
+                    <p>
+                        하지만 합의는 결정적으로 작용합니다. 검사와 법원이 참작하기 때문입니다.
+                        경찰 실무에서도 무인점포 도난은 대부분 소액 사건이라
+                        <strong>점주와 합의되면 기소유예나 즉결심판으로 종결</strong>되는 경우가 많습니다.
+                    </p>
+                    <p>
+                        즉결심판은 20만원 이하의 벌금·구류·과료에 처하는 경미한 사건을 경찰서장이 법원에 청구하는 절차입니다.
+                    </p>
+                </li>
+            </ol>
+
+            <h2>범인이 미성년자일 때 — 나이에 따라 완전히 달라집니다</h2>
+
+            <p>
+                범인의 절반 가까이가 10대인 만큼 이 부분을 알아두면 판단이 빨라집니다.
+                <strong>형사 처벌과 손해배상은 별개</strong>라는 점이 핵심입니다.
+            </p>
+
+            <table>
+                <thead>
+                    <tr><th>나이</th><th>형사</th><th>배상 청구 대상과 난이도</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="num">10세 미만</td>
+                        <td>처벌·보호처분 모두 불가</td>
+                        <td>부모에게 청구 (민법 제755조)</td>
+                    </tr>
+                    <tr>
+                        <td class="num">10~13세<br><small>(촉법소년)</small></td>
+                        <td>형사처벌 불가, 소년부 보호사건</td>
+                        <td><strong>부모에게 청구 — 상대적으로 쉬움.</strong> 부모가 "감독을 게을리하지 않았다"를 입증해야 함</td>
+                    </tr>
+                    <tr>
+                        <td class="num">14~16세</td>
+                        <td>형사처벌 또는 보호처분</td>
+                        <td>사안별 판단 (회색지대)</td>
+                    </tr>
+                    <tr>
+                        <td class="num">17~18세</td>
+                        <td>형사처벌 또는 보호처분</td>
+                        <td><strong>본인에게 청구. 부모 책임은 어려움</strong> — 점주가 감독의무 위반과 인과관계를 입증해야 함</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                역설적이지만 <strong>범인이 어릴수록 부모에게 배상받기가 쉽고, 고등학생쯤 되면 오히려 어려워집니다.</strong>
+                책임능력이 없는 미성년자는 민법 제755조로 감독의무자가 책임을 지고 입증책임도 부모에게 넘어가지만,
+                책임능력이 인정되는 나이(판례상 대략 17세 이상)가 되면 민법 제750조로만 다툴 수 있어
+                피해자가 부모의 감독 소홀을 직접 입증해야 하기 때문입니다(대법원 2003다5061).
+            </p>
+
+            <h2>민사소송은 계산해보면 답이 나옵니다</h2>
+
+            <p>
+                "소액이라도 끝까지 간다"고 마음먹으셨다면, 비용부터 보시는 게 좋습니다.
+            </p>
+
+            <table>
+                <thead>
+                    <tr><th>항목</th><th>금액</th><th>비고</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>인지대</td><td class="num">5,000원</td><td>소가 100만원 기준 (소가 × 0.5%)</td></tr>
+                    <tr><td>송달료</td><td class="num">110,000원</td><td>당사자 2명 × 10회 × 5,500원</td></tr>
+                    <tr><td><strong>합계</strong></td><td class="num"><strong>약 115,000원</strong></td><td>변호사 없이 직접 진행 기준</td></tr>
+                </tbody>
+            </table>
+
+            <p>
+                <strong>5,000원을 회수하려고 11만원 이상을 먼저 내야 합니다.</strong>
+                여기에 서류 준비와 출석에 드는 시간은 계산에도 넣지 않았습니다.
+                소액사건(소가 3,000만원 이하)에는 이행권고결정처럼 간이한 절차가 있긴 하지만,
+                무인매장 도난의 전형적인 피해 규모에서는 <strong>형사 절차 안에서의 합의가 사실상 유일하게 현실적인 회수 경로</strong>입니다.
+            </p>
+
+            <h2>결론: 사후 대응은 무엇을 해도 손해입니다</h2>
+
+            <p>
+                여기까지 읽으셨다면 눈치채셨을 겁니다.
+                <strong>도난이 일어난 뒤에 할 수 있는 최선이라는 게, 손해를 줄이는 정도지 회복하는 게 아닙니다.</strong>
+            </p>
+
+            <ul>
+                <li>돈은 대부분 못 받습니다 — 피해액의 78%가 10만원 이하</li>
+                <li>잘못 대응하면 점주가 형사 문제에 휘말립니다</li>
+                <li>영상 확보, 신고, 조사, 합의에 들어가는 시간은 보상되지 않습니다</li>
+                <li>그리고 절도 재복역률은 46.8%로 주요 범죄 중 가장 높습니다. 같은 사람이 또 옵니다</li>
+            </ul>
+
+            <p>
+                그래서 실질적인 대책은 <strong>사건이 일어나는 순간에 개입하는 것</strong>일 수밖에 없습니다.
+                기록만 남기는 CCTV와, 이상 행동을 감지해 <strong>그 자리에서 말을 거는 시스템</strong>은 결과가 다릅니다.
+                광주·전남에서 무인점포 절도가 크게 줄었을 때 언론이 꼽은 요인 중 하나도
+                "매장에 손님이 들어서면 자동으로 소리가 나오는" 음성 안내였습니다.
+            </p>
+
+            <div class="tip-box">
+                <h4>💡 오늘 바로 점검해볼 것</h4>
+                <p>
+                    <strong>외부 CCTV가 있으신가요?</strong>
+                    서울시 조사에서 내부 CCTV 설치율은 95%였지만 <strong>외부는 56%에 그쳤습니다.</strong>
+                    경찰이 수사에서 가장 아쉬워하는 부분도 매장 밖 동선입니다.
+                    범인이 어느 방향으로 갔는지, 차량을 탔는지가 검거를 가릅니다.
+                </p>
+                <p style="margin-top:1rem;">
+                    <strong>CCTV 안내판은 붙어 있으신가요?</strong>
+                    개인정보보호법 제25조 제4항은 정보주체가 쉽게 인식할 수 있도록 안내판 설치 등 필요한 조치를 하도록 정하고 있습니다.
+                    도난 대응 이전에 점주 본인을 지키는 최소 요건입니다.
+                </p>
+            </div>
+
+            <p>
+                에브라임 시드는 AI가 이상 행동을 감지하면 관제 요원이 매장 스피커로 직접 안내·경고 방송을 송출합니다.
+                기록을 남기는 데서 끝나지 않고, <strong>그 사람이 물건을 들고 나가기 전에 개입하는 것</strong>을 목표로 합니다.
+                위에서 정리한 사후 절차를 아예 밟지 않는 것이 가장 싸게 먹히기 때문입니다.
+            </p>
+
+            <div style="margin-top: 4rem; text-align: center;">
+                <a href="blog.html" class="btn btn-secondary">다른 글 보기</a>
+                <a href="contact.html" class="btn btn-primary" style="margin-left: 1rem;">우리 매장 상담받기</a>
+            </div>
+
+            <div class="disclaimer">
+                <p>
+                    <strong>안내</strong> ·
+                    이 글은 공개된 판례, 법령, 정부·연구기관 통계와 언론 보도를 바탕으로 정리한 일반적인 정보이며,
+                    구체적인 사건에 대한 법률 자문이 아닙니다. 실제 사건의 처리 방향은 사실관계에 따라 달라질 수 있으므로
+                    금액이 크거나 분쟁이 예상되는 경우 변호사와 상담하시기 바랍니다.
+                    법령과 판례는 개정·변경될 수 있습니다.
+                </p>
+                <p class="sources" style="margin-top:1.5rem;">
+                    <strong>참고 자료</strong><br>
+                    · 경찰청 무인점포 절도 발생 현황 (권칠승 의원실 제출 자료, 2026)<br>
+                    · 한국형사·법무정책연구원, 「무인점포 범죄 실태와 대응방안」(2022)<br>
+                    · 에스원 범죄예방연구소 무인매장 절도 분석 (2019~2025)<br>
+                    · 대법원 2020도18397(2024. 8. 23.), 2025도9522(2025. 9. 25.), 2003다5061<br>
+                    · 개인정보보호법 제25조·제18조, 형법 제329조, 민법 제750조·제753조·제755조<br>
+                    · 법무부 교정통계연보 재복역률 (2024)
+                </p>
+                <p class="sources">
+                    최초 작성: 2026년 8월 3일
+                </p>
+            </div>
+
+        </div>
+    </article>
+
+    <e-footer></e-footer>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

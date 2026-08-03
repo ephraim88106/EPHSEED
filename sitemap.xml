@@ -43,6 +43,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://ephseed.com/post-theft-response</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ephseed.com/privacy</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
