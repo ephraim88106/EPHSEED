@@ -579,14 +579,14 @@ class EphseedFooter extends HTMLElement {
                     <h4>연락처</h4>
                     <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
                         Tel: 010-5944-0714<br>
-                        Email: ephraimseed88@gmail.com
+                        Email: namho8816@naver.com
                     </p>
                 </div>
             </div>
             <div class="bottom">
                 <div class="biz-info">
                     <p>상호: 에브라임 시드(Ephraim Seed) &nbsp;|&nbsp; 대표자: 김남호 &nbsp;|&nbsp; 사업자등록번호: 359-05-03748</p>
-                    <p>주소: 인천광역시 연수구 아카데미로 446 &nbsp;|&nbsp; 이메일: ephraimseed88@gmail.com &nbsp;|&nbsp; 전화: 010-5944-0714</p>
+                    <p>주소: 인천광역시 연수구 아카데미로 446 &nbsp;|&nbsp; 이메일: namho8816@naver.com &nbsp;|&nbsp; 전화: 010-5944-0714</p>
                 </div>
                 <div>&copy; 2026 Ephseed AI. All rights reserved.</div>
                 <div class="legal-links">
